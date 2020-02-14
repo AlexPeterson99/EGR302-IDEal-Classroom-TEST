@@ -75,8 +75,11 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+            'HOST': '/cloudsql/ideal-classroom-266820:us-central1:idealclassroom-db',
+            'USER': 'root',
+            'PASSWORD': 'EGR302-ideal',
+            'NAME': 'egr302_idealclassroom_db'
     }
 }
 
