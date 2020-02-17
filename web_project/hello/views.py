@@ -12,3 +12,8 @@ def dbtest(request):
     rows = Course.objects.all()
     # rows = HelloTest.objects.all()
     return render(request, "dbtest.html", {"rows" : rows })
+
+# A login page to test HTML templates - Added by Austen Combs on Feb 17, 2020
+def login(request):
+    #return HttpResponse("As an authorized user, please enter your valid credentials!")
+    return render(request, "login.html")
