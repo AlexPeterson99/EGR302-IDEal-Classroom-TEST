@@ -1,3 +1,4 @@
+<!-- Created by Micah Steinbock on Feb 16, 2020 to work as a test page with the GC MySQL DB integration -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,6 +10,7 @@
         <ul>
             {% for row in rows %}
             <li>{{ row.title }}({{ row.code }}) - {{ row.instructor }}</li>
+            <!--<li>{{ row.firstname }} {{ row.lastname }}</li>-->
             {% endfor %}
         </ul>
     </body>

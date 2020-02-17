@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
+#Temp test model for a course (Made by Micah Steinbock on Feb 16,2020)
 class Course(models.Model):
     title = models.CharField(max_length=100)
     code = models.CharField(max_length=20)
@@ -16,12 +17,11 @@ class Course(models.Model):
         managed = False
         db_table = 'hello_course'
 
-
+#Temp test model for a table (made by Micah Steinbock on Feb 16,2020)
 class HelloTest(models.Model):
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
 
     class Meta:
         managed = False
-        db_table = 'hello_test'
-
+        db_table = 'test'
