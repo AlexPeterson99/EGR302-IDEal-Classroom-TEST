@@ -3,4 +3,5 @@ from hello import views
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("dbtest/", views.dbtest, name="dbtest"),
 ]

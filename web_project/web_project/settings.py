@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'hello',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'web_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,10 +77,11 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-            'HOST': '/cloudsql/ideal-classroom-266820:us-central1:idealclassroom-db',
+            'HOST': '34.68.207.76',
+            'PORT': '3306',
+            'NAME': 'egr302_idealclassroom_db',
             'USER': 'root',
             'PASSWORD': 'EGR302-ideal',
-            'NAME': 'egr302_idealclassroom_db'
     }
 }
 
