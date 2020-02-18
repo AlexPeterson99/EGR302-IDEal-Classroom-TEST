@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.db import connection
 from hello.models import Course, HelloTest
 
+# User home page - Edited by Austen Combs on Feb 17, 2020
 def home(request):
-    return HttpResponse("Welcome, Django! This is a test to make sure we can update Google Cloud. Worked here!")
+    return render(request, "home.html")
 
 # A test page to test if the database integration is working properly - Added by Micah Steinbock on Feb 16, 2020
 def dbtest(request):
