@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db import connection
-from hello.models import Course, HelloTest
 
 # User home page - Edited by Austen Combs on Feb 17, 2020
 def home(request):
@@ -10,9 +9,10 @@ def home(request):
 # A test page to test if the database integration is working properly - Added by Micah Steinbock on Feb 16, 2020
 def dbtest(request):
     # Course = a model that is connected to the GC MySQL DB
-    rows = Course.objects.all()
+    #rows = Course.objects.all()
     # rows = HelloTest.objects.all()
-    return render(request, "dbtest.html", {"rows" : rows })
+    #return render(request, "dbtest.html", {"rows" : rows })
+    return render(request, "dbtest.html")
 
 # User login page - Added by Austen Combs on Feb 17, 2020
 def login(request):

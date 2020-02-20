@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
             'HOST': '34.68.207.76',
             'PORT': '3306',
-            'NAME': 'egr302_idealclassroom_db',
+            'NAME': 'idealclassroom_db',
             'USER': 'root',
             'PASSWORD': 'EGR302-ideal',
     }
