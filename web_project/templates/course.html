@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This is a course!</title>
+</head>
+<body>
+    <h1>That one course with important information!</h1>
+    <p>Totally will not become outdated knowledge by graduation!</p>
+    <div class="courses">
+        {% for course in courses%}
+        <h3>{{course.Title}}</h3>
+            <div class="course">
+                <p>course.Description</p>
+                <div class="assignments">
+                    {% for assignment in assignments %}
+                        <p><a href="assignment.html">{{assignment.Title}}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

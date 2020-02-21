@@ -6,7 +6,26 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>This is the home page!</h1>
-    <p>Welcome to your new home!</p>
+    <h1>IDEal Classroom</h1>
+    {% for user in users %}
+    <h2>Hello {{user.Email}}, welcome to your new home!</h2>
+    {% endfor %}
+    <div class="courses">
+        <h3>Courses:</h3>
+        {% for course in courses %}
+            <div class="course">
+                <p><a href="course.html">{{course.Title}}</a></p>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="grades">
+        <h3>Grades:</h3>
+        {% for submit in submits %}
+            <div class="grade">
+                <p>{{submit.AssignmentID.Title}}</p>
+                <p>{{submit.Grades}}</p>
+            </div>
+        {% endfor %}
+    </div>
 </body>
 </html>

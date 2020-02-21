@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This is an assignment!</title>
+</head>
+<body>
+    <h1>Generic Important Assignment</h1>
+    <p>Standard issue work that totally will not be completed last minute!</p>
+    <div class="assignments">
+        <h3>Assignments:</h3>
+            {% for assignment in assignments %}
+                <div class="assignment">
+                    <p>{{assignment.Title}}</p>
+                    <p>{{assignment.Description}}</p>
+                    <p>{{assignment.DueDate}}</p>
+                </div>
+            {% endfor %}
+    </div>
+    <button type="button">Upload Assignment</button>
+</body>
+</html>
