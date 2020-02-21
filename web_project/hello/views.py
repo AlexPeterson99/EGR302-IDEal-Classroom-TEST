@@ -25,4 +25,3 @@ def register(request):
 # User account page - Added by Austen Combs on Feb 17, 2020
 def account(request):
     return render(request, "account.html")
-

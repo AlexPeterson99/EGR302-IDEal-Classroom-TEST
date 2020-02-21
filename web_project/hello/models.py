@@ -120,25 +120,38 @@ class DjangoSession(models.Model):
 
 # Custom built table added on 2/20/2020 by Micah steinbock
 class TempUsers(models.Model):
+    #Email is also used as username
     Email = models.EmailField()
     Password = models.CharField(max_length=255)
     SchoolID = models.CharField(max_length=20)
     GitHubUsername = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.Email
+
 # Custom built table added on 2/20/2020 by Micah steinbock
 class Roster(models.Model):
     UserID = models.ForeignKey('TempUsers', on_delete=models.CASCADE)
     CourseID = models.ForeignKey('Course', on_delete=models.CASCADE)
+    #Which user class they are (instructor/student/ta/tutor)
     Classification = models.CharField(max_length=255)
+    #Number of chances they have on assignments
     NumExtensions = models.IntegerField()
+
+    def __str__(self):
+        return self.UserID.Email + ' - ' + self.CourseID.Code
 
 # Custom built table added on 2/20/2020 by Micah steinbock
 class Course(models.Model):
-    InstructorID = models.ForeignKey('Roster', on_delete=models.CASCADE)
+    InstructorID = models.ForeignKey('TempUsers', on_delete=models.CASCADE)
     Title = models.CharField(max_length=255)
     Code = models.CharField(max_length=255)
     Description = models.TextField()
+    #The code needed to add the class to your roster
     Password = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.Code
 
 # Custom built table added on 2/20/2020 by Micah steinbock
 class Assignment(models.Model):
@@ -148,10 +161,13 @@ class Assignment(models.Model):
     DueDate = models.DateTimeField()
     ReleaseDate = models.DateTimeField()
     PossiblePts = models.IntegerField()
-    SolutionLink = models.SlugField()
+    SolutionLink = models.SlugField(blank=True)
     ShowSolution = models.BooleanField()
-    ShowSolutionOnDate = models.DateTimeField()
+    ShowSolutionOnDate = models.DateTimeField(blank=True)
     NumAttempts = models.IntegerField()
+
+    def __str__(self):
+        return self.CourseID.Code + ' - ' + self.Title
 
 # Custom built table added on 2/20/2020 by Micah steinbock
 class Submission(models.Model):
@@ -159,5 +175,8 @@ class Submission(models.Model):
     RosterID = models.ForeignKey('Roster', on_delete=models.CASCADE)
     SubmittedOn = models.DateTimeField(auto_now_add=True)
     Grade = models.DecimalField(max_digits=7, decimal_places=2)
-    Comments = models.TextField()
+    Comments = models.TextField(blank=True)
     DidUseExtension = models.BooleanField()
+
+    def __str__(self):
+        return self.AssignmentID.CourseID.Code + ' - ' + self.AssignmentID.Title + ' - ' + self.RosterID.UserID.Email
