@@ -22,8 +22,6 @@ from compile import run_tests
 compile_java_class("Calculator.java")
 compile_java_test("CalculatorTest.java")
 
-run("CalcSuiteRunner");
-
 
 # 2) compile and run both classes at once.
 print(run_tests("Calculator.java", "CalculatorTest.java"))
