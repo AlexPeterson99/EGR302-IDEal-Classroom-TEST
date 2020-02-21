@@ -26,7 +26,7 @@ HAMCREST_HOME = "java_dependencies\hamcrest-core-1.3.jar"
 
 #The time to allow a test to run before declaring a fail result.
 #This is handy if the JAVA class being tested has an infinite loop or buggy code.
-TEST_TIMEOUT: int = 10
+TEST_TIMEOUT = 10
 
 
 
@@ -43,7 +43,7 @@ TEST_TIMEOUT: int = 10
 #       - creates a .class file of source_file.
 #       - raises compilationError if compiling source_file is unsuccessful.
 #
-def compile_java_class(source_file: str):
+def compile_java_class(source_file):
     result = subprocess.run(f'javac {source_file}')
     if result.returncode != 0:
         raise CompilationError
@@ -62,7 +62,7 @@ def compile_java_class(source_file: str):
 #       - creates a .class file of test_file.
 #       - raises compilationError if compiling source_file is unsuccessful.
 #
-def compile_java_test(test_file: str):
+def compile_java_test(test_file):
     result = subprocess.run(f'javac -cp .;{JUNIT_HOME};{HAMCREST_HOME} {test_file}')
     if result.returncode != 0:
         raise CompilationError
@@ -81,7 +81,7 @@ def compile_java_test(test_file: str):
 #       - throws exception if the tests take longer than the allowed time to complete.(in case of poor java implementation)
 #   returns:
 #       - test result output.
-def run(junit_class: str):
+def run(junit_class):
     output = "out.txt"
     with open(output, 'w') as stdout_file:
         try:
@@ -99,7 +99,7 @@ def run(junit_class: str):
 #   post:
 #       - returns response based on test ressult success.
 #
-def run_tests(source_file: str, test_file: str):
+def run_tests(source_file, test_file):
     compile_java_class(source_file)
     compile_java_test(test_file)
     results = run(test_file[0:-5])
@@ -111,5 +111,5 @@ def run_tests(source_file: str, test_file: str):
 #       - results is a string containing the report from the tests ran.
 #   return:
 #       - returns true if ALL tests passed.
-def is_passing(results: str):
+def is_passing(results):
     return 'OK' in results.splitlines()[:-1 : 2][2]
