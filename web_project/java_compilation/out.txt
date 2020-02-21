@@ -5,3 +5,5 @@ Time: 0
 OK (1 test)
 
 This was the result
+
+This is my test
