@@ -1,7 +1,7 @@
 # compile.py
 #
 # Created By: Alex Peterson     AlexJoseph.Peterson@CalBaptist.edu
-# Last Edited: Feb 20, 2020
+# Last Edited: Feb 21, 2020
 #
 # Description:
 #       compile.py is a script with functions to compile, and run JAVA classes and
@@ -10,6 +10,7 @@
 # Dependencies:
 #       - "C:/Users/Alex/Desktop/java_compilation/java_dependencies/junit-4.13.jar"
 #       - "C:/Users/Alex/Desktop/java_compilation/java_dependencies/hamcrest-core-1.3.jar"
+#
 #
 
 import os
