@@ -6,4 +6,4 @@ OK (1 test)
 
 This was the result
 
-This is my test
+This is my test :)
