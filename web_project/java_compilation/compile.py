@@ -44,7 +44,7 @@ TEST_TIMEOUT = 10
 #       - raises compilationError if compiling source_file is unsuccessful.
 #
 def compile_java_class(source_file):
-    result = subprocess.run(f'javac {source_file}')
+    result = subprocess.run('javac {source_file}'.format(source_file = source_file))
     if result.returncode != 0:
         raise CompilationError
 
@@ -63,7 +63,7 @@ def compile_java_class(source_file):
 #       - raises compilationError if compiling source_file is unsuccessful.
 #
 def compile_java_test(test_file):
-    result = subprocess.run(f'javac -cp .;{JUNIT_HOME};{HAMCREST_HOME} {test_file}')
+    result = subprocess.run('javac -cp .;{JUNIT_HOME};{HAMCREST_HOME} {test_file}'.format(JUNIT_HOME = JUNIT_HOME, HAMCREST_HOME = HAMCREST_HOME, test_file = test_file))
     if result.returncode != 0:
         raise CompilationError
 
@@ -85,7 +85,7 @@ def run(junit_class):
     output = "out.txt"
     with open(output, 'w') as stdout_file:
         try:
-            result = subprocess.run(f'java -cp .;{JUNIT_HOME};{HAMCREST_HOME} org.junit.runner.JUnitCore {junit_class}', stdout=stdout_file, timeout=TEST_TIMEOUT)
+            result = subprocess.run('java -cp .;{JUNIT_HOME};{HAMCREST_HOME} org.junit.runner.JUnitCore {junit_class}'.format(JUNIT_HOME = JUNIT_HOME, HAMCREST_HOME = HAMCREST_HOME, junit_class = junit_class), stdout=stdout_file, timeout=TEST_TIMEOUT)
         except subprocess.TimeoutExpired:
             return 'TEST TIMED OUT'
     with open(output) as f:
