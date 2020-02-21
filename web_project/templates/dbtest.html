@@ -1,0 +1,17 @@
+<!-- Created by Micah Steinbock on Feb 16, 2020 to work as a test page with the GC MySQL DB integration -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Database Query Test</title>
+    </head>
+    <body>
+        <h1>This is a Database Test Page</h1>
+        <ul>
+            {% for row in rows %}
+            <li>{{ row.title }}({{ row.code }}) - {{ row.instructor }}</li>
+            <!--<li>{{ row.firstname }} {{ row.lastname }}</li>-->
+            {% endfor %}
+        </ul>
+    </body>
+</html>
