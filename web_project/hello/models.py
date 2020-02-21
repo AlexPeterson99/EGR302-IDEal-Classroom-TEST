@@ -116,3 +116,48 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
+
+
+# Custom built table added on 2/20/2020 by Micah steinbock
+class TempUsers(models.Model):
+    Email = models.EmailField()
+    Password = models.CharField(max_length=255)
+    SchoolID = models.CharField(max_length=20)
+    GitHubUsername = models.CharField(max_length=255)
+
+# Custom built table added on 2/20/2020 by Micah steinbock
+class Roster(models.Model):
+    UserID = models.ForeignKey('TempUsers', on_delete=models.CASCADE)
+    CourseID = models.ForeignKey('Course', on_delete=models.CASCADE)
+    Classification = models.CharField(max_length=255)
+    NumExtensions = models.IntegerField()
+
+# Custom built table added on 2/20/2020 by Micah steinbock
+class Course(models.Model):
+    InstructorID = models.ForeignKey('Roster', on_delete=models.CASCADE)
+    Title = models.CharField(max_length=255)
+    Code = models.CharField(max_length=255)
+    Description = models.TextField()
+    Password = models.CharField(max_length=255)
+
+# Custom built table added on 2/20/2020 by Micah steinbock
+class Assignment(models.Model):
+    CourseID = models.ForeignKey('Course', on_delete=models.CASCADE)
+    Title = models.CharField(max_length=255)
+    Description = models.TextField()
+    DueDate = models.DateTimeField()
+    ReleaseDate = models.DateTimeField()
+    PossiblePts = models.IntegerField()
+    SolutionLink = models.SlugField()
+    ShowSolution = models.BooleanField()
+    ShowSolutionOnDate = models.DateTimeField()
+    NumAttempts = models.IntegerField()
+
+# Custom built table added on 2/20/2020 by Micah steinbock
+class Submission(models.Model):
+    AssignmentID = models.ForeignKey('Assignment', on_delete=models.CASCADE)
+    RosterID = models.ForeignKey('Roster', on_delete=models.CASCADE)
+    SubmittedOn = models.DateTimeField(auto_now_add=True)
+    Grade = models.DecimalField(max_digits=7, decimal_places=2)
+    Comments = models.TextField()
+    DidUseExtension = models.BooleanField()

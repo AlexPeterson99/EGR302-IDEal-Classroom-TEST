@@ -1,5 +1,0 @@
-[run]
-include = ideal_classroom/*
-omit = *migrations*, *tests*
-plugins =
-    django_coverage_plugin
