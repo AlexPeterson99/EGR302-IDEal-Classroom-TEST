@@ -1,10 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db import connection
 from .models import TempUsers
 from .models import Course
 from .models import Assignment
 from .models import Submission
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
@@ -21,13 +22,29 @@ def dbtest(request):
     #return render(request, "dbtest.html", {"rows" : rows })
     return render(request, "dbtest.html")
 
-# User login page - Added by Austen Combs on Feb 17, 2020
+# Login form page - Updated by Abanoub Farag on Feb 23, 2020
 def login(request):
-    return render(request, "login.html")
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            # log the user in
+            return redirect('account.html')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 
-# User registration page - Added by Austen Combs on Feb 17, 2020
+# User registration page - Updated by Abanoub Farag on Feb 23, 2020
 def register(request):
-    return render(request, "register.html")
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # log the user in
+            return redirect('account.html')
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
 
 # User account page - Added by Austen Combs on Feb 17, 2020
 def account(request):

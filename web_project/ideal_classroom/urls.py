@@ -9,5 +9,4 @@ urlpatterns = [
     path("account/", views.account, name="account"),
     path("course/assignment/", views.assignment, name="assignment"),
     path("course/", views.course, name="course"),
-    url(r'^accounts/', include('accounts.urls'))
 ]

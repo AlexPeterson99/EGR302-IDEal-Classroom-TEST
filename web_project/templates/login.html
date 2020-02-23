@@ -9,6 +9,12 @@
 <body>
     <h1>This is the login page!</h1>
     <p>As an authorized user, please enter your valid credentials!</p>
+    <h1>Login</h1>
+    <form class="site-form" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Login">
+    </form>
     <p>New user has joined!</p>
 </body>
 </html>
