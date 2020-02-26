@@ -122,12 +122,14 @@ class DjangoSession(models.Model):
 class TempUsers(models.Model):
     #Email is also used as username
     Email = models.EmailField()
+    Firstname = models.CharField(max_length=50)
+    Lastname = models.CharField(max_length=50)
     Password = models.CharField(max_length=255)
     SchoolID = models.CharField(max_length=20)
     GitHubUsername = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.Email
+        return self.Firstname + " " + self.Lastname
 
 # Custom built table added on 2/20/2020 by Micah steinbock
 class Roster(models.Model):
@@ -149,6 +151,7 @@ class Course(models.Model):
     Description = models.TextField()
     #The code needed to add the class to your roster
     Password = models.CharField(max_length=255)
+    GitHubPrefix = models.CharField(max_length=255)
 
     def __str__(self):
         return self.Code
@@ -165,6 +168,7 @@ class Assignment(models.Model):
     ShowSolution = models.BooleanField()
     ShowSolutionOnDate = models.DateTimeField(blank=True)
     NumAttempts = models.IntegerField()
+    GitHubPrefix = models.CharField(max_length=255)
 
     def __str__(self):
         return self.CourseID.Code + ' - ' + self.Title
