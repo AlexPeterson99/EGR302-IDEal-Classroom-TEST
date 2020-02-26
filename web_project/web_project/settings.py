@@ -75,17 +75,31 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-            'HOST': '34.68.207.76',
-            'PORT': '3306',
-            'NAME': 'idealclassroom_db',
-            'USER': 'root',
-            'PASSWORD': 'EGR302-ideal',
-    }
-}
+import pymysql
+pymysql.install_as_MySQLdb()
 
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+                'HOST': '/cloudsql/ideal-classroom-266820:us-central1:idealclassroom-db',
+                'USER': 'root',
+                'PASSWORD': 'EGR302-ideal',
+                'NAME': 'idealclassroom_db',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+                'HOST': '34.68.207.76',
+                'PORT': '3306',
+                'NAME': 'idealclassroom_db',
+                'USER': 'root',
+                'PASSWORD': 'EGR302-ideal',
+        }
+    }
+# [END db_setup]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
