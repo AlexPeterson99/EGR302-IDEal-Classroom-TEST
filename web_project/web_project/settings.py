@@ -90,8 +90,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-                #'HOST': '34.68.207.76',
-                'HOST': '127.0.0.1',
+                'HOST': '34.68.207.76',
                 'PORT': '3306',
                 'NAME': 'idealclassroom_db',
                 'USER': 'root',
