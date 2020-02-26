@@ -25,7 +25,7 @@ SECRET_KEY = '9(18bmw&xv)#yx*!bt9n^2247ww=&hytc)-p5@ktwd%=8a&^!7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["34.68.139.162", "127.0.0.1"]
+ALLOWED_HOSTS = ["34.68.139.162", "127.0.0.1", "https://ideal-classroom-266820.appspot.com"]
 
 
 # Application definition
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 if os.getenv('GAE_APPLICATION', None):
     import pymysql
     pymysql.install_as_MySQLdb()
-    
+
 
 if os.getenv('GAE_APPLICATION', None):
     DATABASES = {
