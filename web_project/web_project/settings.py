@@ -79,24 +79,19 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 if os.getenv('GAE_APPLICATION', None):
     DATABASES = {
         'default': {
-            #'ENGINE': 'django.db.backends.mysql',
-                #'HOST': '/cloudsql/ideal-classroom-266820:us-central1:idealclassroom-db',
-                #'USER': 'root',
-                #'PASSWORD': 'EGR302-ideal',
-                #'NAME': 'idealclassroom_db',
             'ENGINE': 'django.db.backends.mysql',
-                'HOST': '127.0.0.1',
-                'PORT': '3306',
-                'NAME': 'idealclassroom_db',
+                'HOST': '/cloudsql/ideal-classroom-266820:us-central1:idealclassroom-db',
                 'USER': 'root',
                 'PASSWORD': 'EGR302-ideal',
+                'NAME': 'idealclassroom_db',
         }
     }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-                'HOST': '34.68.207.76',
+                #'HOST': '34.68.207.76',
+                'HOST': '127.0.0.1',
                 'PORT': '3306',
                 'NAME': 'idealclassroom_db',
                 'USER': 'root',
