@@ -113,3 +113,6 @@ def run_tests(source_file, test_file):
 #       - returns true if ALL tests passed.
 def is_passing(results):
     return 'OK' in results.splitlines()[:-1 : 2][2]
+
+class CompilationError(Exception):
+    pass
