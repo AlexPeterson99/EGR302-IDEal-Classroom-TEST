@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["34.68.139.162", "127.0.0.1", "https://ideal-classroom-266820.appspot.com"]
 
+BROKER_URL='django://'
+
 
 # Application definition
 
