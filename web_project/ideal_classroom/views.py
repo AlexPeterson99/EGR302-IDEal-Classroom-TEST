@@ -30,7 +30,7 @@ def login(request):
             # log the user in
             return redirect('account.html')
     else:
-        form = AuthenticationForm()
+        form = AuthenticationForm() 
     return render(request, 'login.html', {'form': form})
 
 # User registration page - Updated by Abanoub Farag on Feb 23, 2020
