@@ -12,14 +12,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='tempusers',
-            name='Password',
-        ),
         migrations.AddField(
             model_name='tempusers',
             name='User',
-            field=models.OneToOneField(default=django.utils.timezone.now, on_delete=django.db.models.deletion.CASCADE, to='ideal_classroom.AuthUser'),
+            field=models.OneToOneField(default=1, on_delete=django.db.models.deletion.CASCADE, to='ideal_classroom.AuthUser'),
             preserve_default=False,
         ),
         migrations.AlterField(

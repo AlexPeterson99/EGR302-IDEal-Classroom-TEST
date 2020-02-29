@@ -49,6 +49,9 @@ class AuthUser(models.Model):
     is_active = models.IntegerField()
     date_joined = models.DateTimeField()
 
+    def __str__(self):
+        return self.username
+
     class Meta:
         managed = False
         db_table = 'auth_user'
@@ -117,23 +120,9 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
-
-# Custom built table added on 2/20/2020 by Micah steinbock
-class TempUsers(models.Model):
-    #Email is also used as username
-    Email = models.EmailField()
-    Firstname = models.CharField(max_length=50)
-    Lastname = models.CharField(max_length=50)
-    Password = models.CharField(max_length=255)
-    SchoolID = models.CharField(max_length=20)
-    GitHubUsername = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.Firstname + " " + self.Lastname
-
 # Custom built table added on 2/20/2020 by Micah steinbock
 class Roster(models.Model):
-    UserID = models.ForeignKey('TempUsers', on_delete=models.DO_NOTHING)
+    UserID = models.ForeignKey('AuthUser', on_delete=models.DO_NOTHING)
     CourseID = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
     #Which user class they are (instructor/student/ta/tutor)
     Classification = models.CharField(max_length=255)
@@ -141,11 +130,11 @@ class Roster(models.Model):
     NumExtensions = models.IntegerField()
 
     def __str__(self):
-        return self.UserID.Email + ' - ' + self.CourseID.Code
+        return self.UserID.username + ' - ' + self.CourseID.Code
 
 # Custom built table added on 2/20/2020 by Micah steinbock
 class Course(models.Model):
-    InstructorID = models.ForeignKey('TempUsers', on_delete=models.DO_NOTHING)
+    InstructorID = models.ForeignKey('AuthUser', on_delete=models.DO_NOTHING)
     Title = models.CharField(max_length=255)
     Code = models.CharField(max_length=255)
     Description = models.TextField()
@@ -164,7 +153,7 @@ class Assignment(models.Model):
     DueDate = models.DateTimeField()
     ReleaseDate = models.DateTimeField()
     PossiblePts = models.IntegerField()
-    SolutionLink = models.SlugField(blank=True)
+    SolutionLink = models.CharField(max_length=255)
     ShowSolution = models.BooleanField()
     ShowSolutionOnDate = models.DateTimeField(blank=True)
     NumAttempts = models.IntegerField()
@@ -183,4 +172,16 @@ class Submission(models.Model):
     DidUseExtension = models.BooleanField()
 
     def __str__(self):
-        return self.AssignmentID.CourseID.Code + ' - ' + self.AssignmentID.Title + ' - ' + self.RosterID.UserID.Email
+        return self.AssignmentID.CourseID.Code + ' - ' + self.AssignmentID.Title + ' - ' + self.RosterID.UserID.username
+
+class UserDetail(models.Model):
+    User = models.OneToOneField('AuthUser', on_delete=models.DO_NOTHING)
+    #Email is also used as username
+    Email = models.EmailField()
+    Firstname = models.CharField(max_length=50)
+    Lastname = models.CharField(max_length=50)
+    SchoolID = models.CharField(max_length=20)
+    GitHubUsername = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.User.username

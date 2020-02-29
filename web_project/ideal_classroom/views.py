@@ -1,15 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db import connection
-from .models import TempUsers
-from .models import Course
-from .models import Assignment
-from .models import Submission
+from .models import Course, Assignment, Submission, AuthUser, UserDetail
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
-    users = TempUsers.objects.all()
+    users = AuthUser.objects.all()
     courses = Course.objects.all()
     submits = Submission.objects.all()
     return render(request, "home.html", {'users': users, 'courses': courses, 'submits': submits})
