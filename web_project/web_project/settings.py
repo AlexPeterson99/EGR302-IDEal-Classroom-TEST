@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-if os.getenv('GAE_APPLICATION', None):
+if os.getenv('ideal-classroom', None):
     import pymysql
     pymysql.install_as_MySQLdb()
 
 
-if os.getenv('GAE_APPLICATION', None):
+if os.getenv('ideal-classroom', None):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
