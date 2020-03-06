@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from .models import Course, Assignment, Submission, AuthUser, UserDetail
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from . import forms
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
@@ -52,6 +53,19 @@ def course(request):
     courses = Course.objects.all()
     assignments = Assignment.objects.all()
     return render(request, "course.html", {'courses':courses, 'assignments': assignments})
+
+#Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
+def create_course(request):
+    if request.method == 'POST':
+        form = forms.CreateCourse(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.InstructorID = request.user
+            instance.save()
+            return redirect('course')
+    else:
+        form = forms.CreateCourse()
+    return render(request, 'create_course.html', {'form':form})
 
 # User assignments page - Added by Austen Combs on Feb 20, 2020
 def assignment(request):
