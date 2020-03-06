@@ -1,5 +1,6 @@
 from django.urls import path
 from ideal_classroom import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -10,3 +11,5 @@ urlpatterns = [
     path("course/assignment/", views.assignment, name="assignment"),
     path("course/", views.course, name="course"),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

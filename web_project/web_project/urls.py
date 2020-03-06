@@ -16,7 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+
 urlpatterns = [
     path("", include("ideal_classroom.urls")),
     path("admin/", admin.site.urls),
 ]
+
