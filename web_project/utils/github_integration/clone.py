@@ -11,26 +11,20 @@ import git
 import tempfile
 import os
 from datetime import datetime
-#from ideal_classroom.models import Course
-#from ideal_classroom.models import Assignment
+from ideal_classroom.models import UserDetail
 
 
 timeStamp = datetime.now().time()
 basePath = os.getcwd()
-gitHubID = request.user.username
-assignnment = 
+userName = request.user.username
+gitHubID = UserDetail.objects.get(User = userName).values('GitHubUsername')
 
 #Temporary File to store users code
 tempfile.tempdir = '/{BasePath}/{Github_id}-{TimeStamp}'.format(BasePath=basePath, Github_id = gitHubID, TimeStamp = timeStamp)
+tempFile = tempfile.TemporarFile()
 
 #Generated github link
-#assignment_link = 'http://github.com/{Github_prefix}/{Github_id}'.format(Github_id=gitHubID)
-
-
-print ("New temp directory:", tempfile.gettempdir())
-
-
-#Path that will stored the cloned repository
+assignment_link = 'http://github.com/{Github_prefix}/{Github_id}'.format(Github_id=gitHubID)
 
 #Function that will clone GitHub Repository to specified path
 #   PRE: gitRepo is the absolute path of where the repository will be cloned to
@@ -38,3 +32,5 @@ print ("New temp directory:", tempfile.gettempdir())
 
 def cloneGit(tempFolder, gitRepo):
 	git.Git(tempFolder).clone(gitRepo)
+
+cloneGit(tempFile, assignment_link)
