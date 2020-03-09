@@ -71,3 +71,14 @@ def create_course(request):
 def assignment(request):
     assignments = Assignment.objects.all()
     return render(request, "assignment.html", {'assignments': assignments})
+
+def create_assignment(request):
+    if request.method == 'POST':
+        form = forms.CreateAssignment(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            return redirect('assignment')
+    else:
+        form = forms.CreateAssignment()
+    return render(request, 'create_assignment.html', {'form':form})
