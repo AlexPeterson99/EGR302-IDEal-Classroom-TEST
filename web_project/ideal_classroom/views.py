@@ -80,3 +80,14 @@ def run_test(request):
     print(data.text)
     data=data.text
     return render(request, 'hello.html', {'data':data})
+
+def create_assignment(request):
+    if request.method == 'POST':
+        form = forms.CreateAssignment(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            return redirect('assignment')
+    else:
+        form = forms.CreateAssignment()
+    return render(request, 'create_assignment.html', {'form':form})

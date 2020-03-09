@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Assignment</title>
+</head>
+<body>
+    <h1>Create an assignment here!</h1>
+    <form class="site-form" action="{% url 'create_assignment' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Create Assignment">
+    </form>
+</body>
+</html>
