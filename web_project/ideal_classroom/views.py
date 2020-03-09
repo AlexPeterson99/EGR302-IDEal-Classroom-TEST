@@ -71,3 +71,12 @@ def create_course(request):
 def assignment(request):
     assignments = Assignment.objects.all()
     return render(request, "assignment.html", {'assignments': assignments})
+
+def button(request):
+    return render(request, 'hello.html')
+    
+def run_test(request):
+    data=request.get("...")
+    print(data.text)
+    data=data.text
+    return render(request, 'hello.html', {'data':data})

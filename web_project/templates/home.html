@@ -1,32 +1,23 @@
-{% load static %}
+{% extends 'base_layout.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <title>Home</title>
-</head>
-<body>
-    <h1>IDEal Classroom</h1>
-    <h2>Hello! Welcome to your new home!</h2>
-    <div class="courses">
-        <h3>Courses:</h3>
-        {% for course in courses %}
-            <div class="course">
-                <p><a href="course">{{course.Title}}</a></p>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="grades">
-        <h3>Grades:</h3>
-        {% for submit in submits %}
-            <div class="grade">
-                <p>{{submit.AssignmentID.Title}}: {{submit.Grade}}</p>
-                <p>- Submitted: {{submit.SubmittedOn}}</p>
-            </div>
-        {% endfor %}
-    </div>
-</body>
-</html>
+{% block content %}
+<h1>IDEal Classroom</h1>
+<h2>Hello! Welcome to your new home!</h2>
+<div class="courses">
+    <h3>Courses:</h3>
+    {% for course in courses %}
+        <div class="course">
+            <p><a href="course">{{course.Title}}</a></p>
+        </div>
+    {% endfor %}
+</div>
+<div class="grades">
+    <h3>Grades:</h3>
+    {% for submit in submits %}
+        <div class="grade">
+            <p>{{submit.AssignmentID.Title}}: {{submit.Grade}}</p>
+            <p>- Submitted: {{submit.SubmittedOn}}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

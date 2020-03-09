@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a course</title>
-</head>
-<body>
-    <h1>Create a course here!</h1>
-    <form class="site-form" action="{% url 'create_course' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Create Course">
-    </form>
-</body>
-</html>
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<h1>Create a course here!</h1>
+<form class="site-form" action="{% url 'create_course' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Create Course">
+</form>
+{% endblock %}
