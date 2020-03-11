@@ -15,7 +15,10 @@
                     <p>{{assignment.Title}}</p>
                     <p>{{assignment.Description}}</p>
                     <p>{{assignment.DueDate}}</p>
-                    <button type="button">Test Submission</button>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="run_test">Run Test</button>
+                    </form>
                 </div>
             {% endfor %}
     </div>

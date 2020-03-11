@@ -72,15 +72,6 @@ def assignment(request):
     assignments = Assignment.objects.all()
     return render(request, "assignment.html", {'assignments': assignments})
 
-def button(request):
-    return render(request, 'hello.html')
-    
-def run_test(request):
-    data=request.get("...")
-    print(data.text)
-    data=data.text
-    return render(request, 'hello.html', {'data':data})
-
 def create_assignment(request):
     if request.method == 'POST':
         form = forms.CreateAssignment(request.POST)
@@ -91,3 +82,24 @@ def create_assignment(request):
     else:
         form = forms.CreateAssignment()
     return render(request, 'create_assignment.html', {'form':form})
+
+# # Button request - Added by Austen Combs on Mar 9, 2020
+# def button(request):
+#     return render(request, 'assignment.html')
+
+# # Script run request from button - Added Combs on Mar 9, 2020
+def run_test(request):
+#     data=request.get("https://www.google.com/")
+#     print(data.text)
+#     data=data.text
+#     return render(request, 'assignment.html', {'data':data})
+if request.method == 'POST' and 'run_script' in request.POST:
+
+    # import function to run
+    from path_to_script import function_to_run
+
+    # call function
+    function_to_run() 
+
+    # return user to required page
+    return HttpResponseRedirect(reverse(app_name:view_name)

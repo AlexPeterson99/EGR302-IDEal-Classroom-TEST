@@ -13,6 +13,7 @@ urlpatterns = [
     path("course/", views.course, name="course"),
     path("create_course/", views.create_course, name="create_course"),
     path("", views.button),
+    path("run_test", views.run_test, name="script"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
