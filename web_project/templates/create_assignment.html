@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>Create an assignment here!</h1>
-    <form class="site-form" action="{% url 'create_assignment' %}" method="post">
+    <p>Note: All Date-times must be inputted in format: 2020-03-10 18:45:00.000000</p>
+    <form class="site-form" action="{% url 'create_assignment' slug=course.Slug %}" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Create Assignment">
