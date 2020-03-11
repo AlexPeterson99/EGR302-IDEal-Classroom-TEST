@@ -1,12 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account</title>
-</head>
-<body>
-    <h1>User Account</h1>
-    <p>Get used to it, this is your life now!</p>
-</body>
-</html>
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<h1>User Profile</h1>
+<h2>This is the user's main page after login</h2>
+<div class="courses">
+    <h3>Courses:</h3>
+    {% for course in courses %}
+        <div class="course">
+            <p><a href="course">{{course.Title}}</a></p>
+        </div>
+    {% endfor %}
+</div>
+<div class="grades">
+    <h3>Grades:</h3>
+    {% for submit in submits %}
+        <div class="grade">
+            <p>{{submit.AssignmentID.Title}}: {{submit.Grade}}</p>
+            <p>- Submitted: {{submit.SubmittedOn}}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
