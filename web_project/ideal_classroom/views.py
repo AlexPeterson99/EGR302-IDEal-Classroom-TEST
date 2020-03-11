@@ -12,14 +12,6 @@ def home(request):
     submits = Submission.objects.all()
     return render(request, "home.html", {'users': users, 'courses': courses, 'submits': submits})
 
-# A test page to test if the database integration is working properly - Added by Micah Steinbock on Feb 16, 2020
-def dbtest(request):
-    # Course = a model that is connected to the GC MySQL DB
-    #rows = Course.objects.all()
-    # rows = HelloTest.objects.all()
-    #return render(request, "dbtest.html", {"rows" : rows })
-    return render(request, "dbtest.html")
-
 # Login form page - Updated by Abanoub Farag on Feb 23, 2020
 def login(request):
     if request.method == 'POST':
@@ -81,13 +73,16 @@ def run_test(request):
     data=data.text
     return render(request, 'hello.html', {'data':data})
 
-def create_assignment(request):
+#Creation page for assignments - Added by Micah Steinbock on March 10, 2020
+def create_assignment(request, slug):
+    course = Course.objects.get(Slug=slug)
     if request.method == 'POST':
         form = forms.CreateAssignment(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
+            instance.CourseID = course
             instance.save()
             return redirect('assignment')
     else:
         form = forms.CreateAssignment()
-    return render(request, 'create_assignment.html', {'form':form})
+    return render(request, 'create_assignment.html', {'form':form, 'course': course})

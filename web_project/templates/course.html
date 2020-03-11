@@ -17,6 +17,7 @@
                     {% for assignment in assignments %}
                         <p><a href="assignment">{{assignment.Title}}</a></p>
                     {% endfor %}
+                    <a href="{% url 'create_assignment' slug=course.Slug %}">Add Assignment</a>
                 </div>
             </div>
         {% endfor %}

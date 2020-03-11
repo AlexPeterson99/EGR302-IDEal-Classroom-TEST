@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # MySQL Built-in Table added on 2/20/2020 by Micah Steinbock
 class AuthGroup(models.Model):
@@ -139,6 +140,7 @@ class Course(models.Model):
     Title = models.CharField(max_length=255)
     Code = models.CharField(max_length=255)
     Description = models.TextField()
+    Slug = models.SlugField()
     #The code needed to add the class to your roster
     Password = models.CharField(max_length=255)
     GitHubPrefix = models.CharField(max_length=255)
@@ -151,12 +153,12 @@ class Assignment(models.Model):
     CourseID = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
     Title = models.CharField(max_length=255)
     Description = models.TextField()
-    DueDate = models.DateTimeField()
-    ReleaseDate = models.DateTimeField()
+    DueDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=False)
+    ReleaseDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=False)
     PossiblePts = models.IntegerField()
     SolutionLink = models.CharField(max_length=255)
     ShowSolution = models.BooleanField()
-    ShowSolutionOnDate = models.DateTimeField(blank=True)
+    ShowSolutionOnDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=True, null=True)
     NumAttempts = models.IntegerField()
     GitHubPrefix = models.CharField(max_length=255)
 
