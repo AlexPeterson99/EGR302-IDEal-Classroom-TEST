@@ -152,6 +152,7 @@ class Course(models.Model):
 class Assignment(models.Model):
     CourseID = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
     Title = models.CharField(max_length=255)
+    Slug = models.SlugField()
     Description = models.TextField()
     DueDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=False)
     ReleaseDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=False)

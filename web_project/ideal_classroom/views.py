@@ -75,4 +75,4 @@ def create_assignment(request, course_id):
             return redirect('assignment')
     else:
         form = forms.CreateAssignment()
-    return render(request, 'create_assignment.html', {'form':form})
+    return render(request, 'create_assignment.html', {'form':form, 'course':course})

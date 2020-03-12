@@ -15,4 +15,4 @@ class CreateAssignment(forms.ModelForm):
     class Meta:
         #widgets = {'DueDate' : MyDateTimeInput(), 'ReleaseDate' : MyDateTimeInput(), 'ShowSolutionOnDate' : MyDateTimeInput()}
         model = models.Assignment
-        fields = ['Title', 'Description', 'DueDate', 'ReleaseDate', 'PossiblePts', 'SolutionLink', 'ShowSolution', 'ShowSolutionOnDate', 'NumAttempts', 'GitHubPrefix']
+        fields = ['Title', 'Slug', 'Description', 'DueDate', 'ReleaseDate', 'PossiblePts', 'SolutionLink', 'ShowSolution', 'ShowSolutionOnDate', 'NumAttempts', 'GitHubPrefix']
