@@ -1,0 +1,18 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<h1>Enroll in a Course!</h1>
+<form class="site-form" action="{% url 'enroll' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Enroll">
+</form>
+<!-- Message alert for if the "password" is invalid-->
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

@@ -8,6 +8,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+import uuid
 
 # MySQL Built-in Table added on 2/20/2020 by Micah Steinbock
 class AuthGroup(models.Model):
@@ -140,9 +141,9 @@ class Course(models.Model):
     Title = models.CharField(max_length=255)
     Code = models.CharField(max_length=255)
     Description = models.TextField()
-    Slug = models.SlugField()
+    Slug = models.SlugField(unique=True)
     #The code needed to add the class to your roster
-    Password = models.CharField(max_length=255)
+    Password = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
     GitHubPrefix = models.CharField(max_length=255)
 
     def __str__(self):
@@ -152,7 +153,7 @@ class Course(models.Model):
 class Assignment(models.Model):
     CourseID = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
     Title = models.CharField(max_length=255)
-    Slug = models.SlugField()
+    Slug = models.SlugField(unique=True)
     Description = models.TextField()
     DueDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=False)
     ReleaseDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=False)

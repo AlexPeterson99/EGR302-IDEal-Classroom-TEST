@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db import connection
-from .models import Course, Assignment, Submission, AuthUser, UserDetail
+from .models import Course, Roster, Assignment, Submission, AuthUser, UserDetail
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from . import forms
+from django.contrib import messages
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
@@ -44,6 +45,35 @@ def course(request):
     courses = Course.objects.all()
     assignments = Assignment.objects.all()
     return render(request, "course.html", {'courses':courses, 'assignments': assignments})
+
+
+#Page where a student can enroll in a course - Added by Micah Steinbock on March 12, 2020
+def enroll(request):
+    if request.method == 'POST':
+        form = forms.Enroll(request.POST)
+        if form.is_valid():
+            course_password = form.cleaned_data['course_password']
+            num_results = Course.objects.filter(Password=course_password).count()
+            #If the course_password is valid (there is an entry with that unique code)
+            if num_results == 1:
+                course = Course.objects.get(Password=course_password)
+                num_results = Roster.objects.filter(UserID=request.user, CourseID=course).count()
+                if num_results == 0:
+                    instance = Roster()
+                    instance.UserID = request.user
+                    instance.CourseID = course
+                    instance.Classification = "Student"
+                    instance.NumExtensions = 3
+                    instance.save()
+                    return redirect('course')
+                else:
+                    messages.add_message(request, messages.INFO, 'You have already enrolled in this class')
+            else:
+                #Alert if the code is not valid
+                messages.add_message(request, messages.INFO, 'Invalid Course Enrollment Code')
+    else:
+        form = forms.Enroll()
+    return render(request, 'enroll.html', {'form':form})
 
 #Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
 def create_course(request):
