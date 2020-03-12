@@ -7,10 +7,7 @@ from . import forms
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
-    users = AuthUser.objects.all()
-    courses = Course.objects.all()
-    submits = Submission.objects.all()
-    return render(request, "home.html", {'users': users, 'courses': courses, 'submits': submits})
+    return render(request, "home.html")
 
 # Login form page - Updated by Abanoub Farag on Feb 23, 2020
 def login(request):
@@ -35,10 +32,12 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-
 # User account page - Added by Austen Combs on Feb 17, 2020
 def account(request):
-    return render(request, "account.html")
+    users = AuthUser.objects.all()
+    courses = Course.objects.all()
+    submits = Submission.objects.all()
+    return render(request, "account.html", {'users': users, 'courses': courses, 'submits': submits})
 
 # User course page - Added by Austen Combs on Feb 20, 2020
 def course(request):
@@ -65,8 +64,8 @@ def assignment(request):
     return render(request, "assignment.html", {'assignments': assignments})
 
 #Creation page for assignments - Added by Micah Steinbock on March 10, 2020
-def create_assignment(request, slug):
-    course = Course.objects.get(Slug=slug)
+def create_assignment(request, course_id):
+    course = Course.objects.get(Slug=course_id)
     if request.method == 'POST':
         form = forms.CreateAssignment(request.POST)
         if form.is_valid():
