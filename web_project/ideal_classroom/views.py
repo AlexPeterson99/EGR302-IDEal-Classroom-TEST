@@ -5,6 +5,7 @@ from .models import Course, Roster, Assignment, Submission, AuthUser, UserDetail
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from . import forms
 from django.contrib import messages
+from test_runner import test_print
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
@@ -16,7 +17,7 @@ def login(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             # log the user in
-            return redirect('account.html')
+            return redirect('account')
     else:
         form = AuthenticationForm() 
     return render(request, 'login.html', {'form': form})
@@ -28,7 +29,7 @@ def register(request):
         if form.is_valid():
             form.save()
             # log the user in
-            return redirect('account.html')
+            return redirect('account')
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
@@ -40,12 +41,23 @@ def account(request):
     submits = Submission.objects.all()
     return render(request, "account.html", {'users': users, 'courses': courses, 'submits': submits})
 
-# User course page - Added by Austen Combs on Feb 20, 2020
-def course(request):
-    courses = Course.objects.all()
-    assignments = Assignment.objects.all()
-    return render(request, "course.html", {'courses':courses, 'assignments': assignments})
+#Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
+def create_course(request):
+    if request.method == 'POST':
+        form = forms.CreateCourse(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.InstructorID = request.user
+            instance.save()
+            return redirect('courses')
+    else:
+        form = forms.CreateCourse()
+    return render(request, 'create_course.html', {'form':form})
 
+# Will show a list of all courses that the user is enrolled in - Added by Austen Combs on Feb 20, 2020
+def courses(request):
+    enrolled_courses = Roster.objects.filter(UserID = request.user)
+    return render(request, "course.html", {'enrolled_courses':enrolled_courses})
 
 #Page where a student can enroll in a course - Added by Micah Steinbock on March 12, 2020
 def enroll(request):
@@ -65,7 +77,7 @@ def enroll(request):
                     instance.Classification = "Student"
                     instance.NumExtensions = 3
                     instance.save()
-                    return redirect('course')
+                    return redirect('courses')
                 else:
                     messages.add_message(request, messages.INFO, 'You have already enrolled in this class')
             else:
@@ -75,23 +87,33 @@ def enroll(request):
         form = forms.Enroll()
     return render(request, 'enroll.html', {'form':form})
 
-#Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
-def create_course(request):
-    if request.method == 'POST':
-        form = forms.CreateCourse(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.InstructorID = request.user
-            instance.save()
-            return redirect('course')
-    else:
-        form = forms.CreateCourse()
-    return render(request, 'create_course.html', {'form':form})
+# user page where the details are displayed for 1 course - Added by Micah Steinbock on March 19, 2020
+def course_details(request, course_id):
+    course = Course.objects.get(Slug=course_id)
+    assignments = Assignment.objects.filter(CourseID = course)
+    return render(request, 'course_details.html', {'course':course, 'assignments':assignments})
 
-# User assignments page - Added by Austen Combs on Feb 20, 2020
-def assignment(request):
-    assignments = Assignment.objects.all()
-    return render(request, "assignment.html", {'assignments': assignments})
+# Will show a list of all assignments that are in the given course - Added by Austen Combs on Feb 20, 2020
+def assignments(request, course_id):
+    course = Course.objects.get(Slug=course_id)
+    assignments = Assignment.objects.filter(CourseID = course)
+    return render(request, "assignment.html", {'course':course, 'assignments':assignments})
+
+# user page where the details are displayed for 1 assignment - Added by Micah Steinbock on March 19, 2020
+def assignment_details(request, course_id, assn_name):
+    course = Course.objects.get(Slug=course_id)
+    assignment = Assignment.objects.get(Slug= assn_name)
+
+    if request.method == 'POST':
+        #Define parameters
+        Username = request.user.username
+        GitHubUserName = UserDetail.objects.get(User = request.user).GitHubUsername
+        CoursePrefix = course.GitHubPrefix
+        AssignmentPrefix = assignment.GitHubPrefix
+        #Call Code
+        test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix)
+    
+    return render(request, 'assignment_details.html', {'course':course, 'assignment':assignment})
 
 #Creation page for assignments - Added by Micah Steinbock on March 10, 2020
 def create_assignment(request, course_id):
@@ -102,7 +124,7 @@ def create_assignment(request, course_id):
             instance = form.save(commit=False)
             instance.CourseID = course
             instance.save()
-            return redirect('assignment')
+            return redirect('assignments')
     else:
         form = forms.CreateAssignment()
     return render(request, 'create_assignment.html', {'form':form, 'course':course})
