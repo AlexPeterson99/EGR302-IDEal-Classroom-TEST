@@ -27,6 +27,7 @@ def test_print(username, github_id, course_prefix, assignment_prefix):
     assignment_link = 'https://github.com/{CoursePrefix}/{AssignmentPrefix}-{GitHubId}'.format(GitHubId=github_id,CoursePrefix=course_prefix,AssignmentPrefix=assignment_prefix)
     print(assignment_link)
     print(username)
+    return username + ', ' + assignment_link
 
 
 #Pass through information to run tests

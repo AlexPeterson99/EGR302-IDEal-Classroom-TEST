@@ -20,5 +20,13 @@
             <input type="submit" value="Test My Code!">
         </form>
     </div>
+    <!-- Message alert with return value from test_runner.py-->
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 </body>
 </html>

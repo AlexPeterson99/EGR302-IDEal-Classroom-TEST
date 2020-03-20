@@ -111,9 +111,10 @@ def assignment_details(request, course_id, assn_name):
         CoursePrefix = course.GitHubPrefix
         AssignmentPrefix = assignment.GitHubPrefix
         #Call Code
-        test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix)
+        returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix)
+        messages.add_message(request, messages.INFO, returnVal)
     
-    return render(request, 'assignment_details.html', {'course':course, 'assignment':assignment})
+    return render(request, 'assignment_details.html', {'course':course,'assignment':assignment})
 
 #Creation page for assignments - Added by Micah Steinbock on March 10, 2020
 def create_assignment(request, course_id):
