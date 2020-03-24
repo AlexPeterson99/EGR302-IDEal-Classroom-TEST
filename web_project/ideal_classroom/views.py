@@ -42,7 +42,7 @@ def account(request):
 
 # User course page - Added by Austen Combs on Feb 20, 2020
 def course(request):
-    courses = Course.objects.all()
+    courses = Course.objects.filter(UserID=request.user)
     assignments = Assignment.objects.all()
     return render(request, "course.html", {'courses':courses, 'assignments': assignments})
 
