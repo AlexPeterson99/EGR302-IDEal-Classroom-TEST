@@ -16,8 +16,8 @@ from ideal_classroom.models import UserDetail
 
 timeStamp = datetime.now().time()
 basePath = os.getcwd()
-userName = request.user.username
-gitHubID = UserDetail.objects.get(User = userName).values('GitHubUsername')
+user = request.user
+gitHubID = UserDetail.objects.get(User = user).values('GitHubUsername')
 
 #Temporary File to store users code
 tempfile.tempdir = '/{BasePath}/{Github_id}-{TimeStamp}'.format(BasePath=basePath, Github_id = gitHubID, TimeStamp = timeStamp)

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This is a course!</title>
+</head>
+<body>
+    <h1>That one course with important information!</h1>
+    <p>Totally will not become outdated knowledge by graduation!</p>
+    <div class="courses">
+        <h1>{{ course.Title }}</h1>
+        {% for assignment in assignments %}
+            <h3><a href="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}">{{ assignment.Title }}</a></h3>
+        {% endfor %}
+    </div>
+</body>
+</html>
