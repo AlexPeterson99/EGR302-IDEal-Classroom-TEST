@@ -145,3 +145,9 @@ def create_assignment(request, course_id):
     else:
         form = forms.CreateAssignment()
     return render(request, 'create_assignment.html', {'form':form, 'course':course})
+
+def grades(request, course_id):
+    course = Course.objects.get(Slug=course_id)
+    roster = Roster.objects.get(UserID = request.user, CourseID = course)
+    grades = Submission.objects.filter(RosterID = roster)
+    return render(request, 'grades.html', {'course':course, 'grades':grades})
