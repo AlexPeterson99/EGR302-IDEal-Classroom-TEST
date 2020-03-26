@@ -171,7 +171,7 @@ class Assignment(models.Model):
 class Submission(models.Model):
     AssignmentID = models.ForeignKey('Assignment', on_delete=models.DO_NOTHING)
     RosterID = models.ForeignKey('Roster', on_delete=models.DO_NOTHING)
-    SubmittedOn = models.DateTimeField(auto_now_add=True)
+    SubmittedOn = models.DateTimeField()
     Grade = models.DecimalField(max_digits=7, decimal_places=2)
     Comments = models.TextField(blank=True)
     DidUseExtension = models.BooleanField()

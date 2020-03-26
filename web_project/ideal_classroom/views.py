@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from . import forms
 from django.contrib import messages
 from test_runner import test_print
+from datetime import datetime
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
@@ -110,9 +111,24 @@ def assignment_details(request, course_id, assn_name):
         GitHubUserName = UserDetail.objects.get(User = request.user).GitHubUsername
         CoursePrefix = course.GitHubPrefix
         AssignmentPrefix = assignment.GitHubPrefix
-        #Call Code
+        #Call Code which saves the GradeInfo object to the returnVal object
         returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix)
-        messages.add_message(request, messages.INFO, returnVal)
+        #Displays the results of the method call on the webpage as a message response
+        messages.add_message(request, messages.INFO, returnVal.comments)
+        #If there is already a submission, then overwrite it.
+        roster = Roster.objects.get(UserID = request.user, CourseID = course)
+        submission = Submission.objects.filter(AssignmentID = assignment, RosterID = roster)
+        if submission.count() > 0:
+            submission.delete()
+        #Adds the grade into the database
+        instance = Submission()
+        instance.AssignmentID = assignment
+        instance.RosterID = roster
+        instance.SubmittedOn = datetime.now()
+        instance.Grade = (returnVal.passedTests / returnVal.totalTests) * assignment.PossiblePts
+        instance.Comments = returnVal.comments
+        instance.DidUseExtension = True
+        instance.save()
     
     return render(request, 'assignment_details.html', {'course':course,'assignment':assignment})
 

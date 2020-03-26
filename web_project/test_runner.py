@@ -14,7 +14,19 @@
 #import compile
 #import clone
 
-# Get the information of the user (GitHub ID, Name, Assignment, Course)
+
+# GradeInfo created by Micah Steinbock on March 26, 2020
+# A custom class object that holds various data that we want to return
+# Data:
+#   passedTests: an integer number that represents the number of tests the code passed
+#   totalTests: an integer number that represents the number of tests that the code was run against
+#   comments: a string that contains any information that we want to display to the webpage
+class GradeInfo:
+    def __init__(self):
+        self.passedTests = 0
+        self.totalTests = 0
+        self.comments = ""
+
 
 # test_print created by Micah Steinbock on March 19, 2020
 # Run when the button on the "assignments_details" page is pressed
@@ -27,8 +39,13 @@ def test_print(username, github_id, course_prefix, assignment_prefix):
     assignment_link = 'https://github.com/{CoursePrefix}/{AssignmentPrefix}-{GitHubId}'.format(GitHubId=github_id,CoursePrefix=course_prefix,AssignmentPrefix=assignment_prefix)
     print(assignment_link)
     print(username)
-    return username + ', ' + assignment_link
-
+    #Creates a new GradeInfo object and fills in the necessary info
+    returnVal = GradeInfo()
+    returnVal.passedTests = 2   #Temp Test Data
+    returnVal.totalTests = 10   #Temp Test Data
+    returnVal.comments = username + ', ' + assignment_link  #Temp Test Data
+    #Returns the GradeInfo object
+    return returnVal
 
 #Pass through information to run tests
 #def test_runner(github_id, student_name, assignment, course):
