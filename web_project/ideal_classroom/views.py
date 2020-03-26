@@ -37,10 +37,10 @@ def register(request):
 
 # User account page - Added by Austen Combs on Feb 17, 2020
 def account(request):
-    users = AuthUser.objects.all()
+    userDetails = UserDetail.objects.get(User = request.user)
     courses = Course.objects.all()
     submits = Submission.objects.all()
-    return render(request, "account.html", {'users': users, 'courses': courses, 'submits': submits})
+    return render(request, "account.html", {'userDetails': userDetails, 'courses': courses, 'submits': submits})
 
 #Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
 def create_course(request):
