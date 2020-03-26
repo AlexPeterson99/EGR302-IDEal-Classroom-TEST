@@ -35,8 +35,9 @@ class GradeInfo:
 #   github_id = the github username of the currently logged in user
 #   course_prefix = the slug for the github classroom prefix
 #   assignment_prefix = the slug for the assignment code
-def test_print(username, github_id, course_prefix, assignment_prefix):
+def test_print(username, github_id, course_prefix, assignment_prefix, solution_link):
     assignment_link = 'https://github.com/{CoursePrefix}/{AssignmentPrefix}-{GitHubId}'.format(GitHubId=github_id,CoursePrefix=course_prefix,AssignmentPrefix=assignment_prefix)
+    print(solution_link)
     print(assignment_link)
     print(username)
     #Creates a new GradeInfo object and fills in the necessary info

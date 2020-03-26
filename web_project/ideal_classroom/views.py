@@ -111,8 +111,9 @@ def assignment_details(request, course_id, assn_name):
         GitHubUserName = UserDetail.objects.get(User = request.user).GitHubUsername
         CoursePrefix = course.GitHubPrefix
         AssignmentPrefix = assignment.GitHubPrefix
+        SolutionLink = assignment.SolutionLink
         #Call Code which saves the GradeInfo object to the returnVal object
-        returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix)
+        returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix,SolutionLink)
         #Displays the results of the method call on the webpage as a message response
         messages.add_message(request, messages.INFO, returnVal.comments)
         #If there is already a submission, then overwrite it.
