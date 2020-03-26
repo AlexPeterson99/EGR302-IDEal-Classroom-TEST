@@ -4,17 +4,10 @@
 <h1>That one course with important information!</h1>
 <p>Totally will not become outdated knowledge by graduation!</p>
 <div class="courses">
-    {}
-    {% for course in courses %}
-    <h3>{{course.Title}}</h3>
+    {% for course in enrolled_courses %}
+    <h3><a href="{% url 'course_details' course_id=course.CourseID.Slug %}">{{course.CourseID.Title}}</a></h3>
         <div class="course">
-            <p>{{course.Description}}</p>
-            <div class="assignments">
-                {% for assignment in assignments %}
-                    <p><a href="assignment">{{assignment.Title}}</a></p>
-                {% endfor %}
-                <a href="{% url 'create_assignment' course_id=course.Slug %}">Add Assignment</a>
-            </div>
+            <p>{{course.CourseID.Description}}</p>
         </div>
     {% endfor %}
 </div>

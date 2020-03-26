@@ -7,13 +7,9 @@
     <h3>Assignments:</h3>
         {% for assignment in assignments %}
             <div class="assignment">
-                <p>{{assignment.Title}}</p>
+                <a href="{% url 'assignment_details' course_id=assignment.CourseID.Slug assn_name=assignment.Slug %}">{{assignment.Title}}</a>
                 <p>{{assignment.Description}}</p>
                 <p>{{assignment.DueDate}}</p>
-                <form method="post">
-                    {% csrf_token %}
-                    <button type="submit" name="run_test">Run Test</button>
-                </form>
             </div>
         {% endfor %}
 </div>
