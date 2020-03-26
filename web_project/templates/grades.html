@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades</title>
+</head>
+<body>
+    <h1>Grades for {{ course.Title }}</h1>
+    <hr>
+    <div class="courses">
+        {% for grade in grades %}
+            <div class="grade">
+                <h3>{{ grade.AssignmentID.Title }}</h3>
+                <p>Grade: {{ grade.Grade }}</p>
+                <p>Submitted On: {{ grade.SubmittedOn }}</p>
+                <p>Comments: {{ grade.Comments }}</p>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+</body>
+</html>
