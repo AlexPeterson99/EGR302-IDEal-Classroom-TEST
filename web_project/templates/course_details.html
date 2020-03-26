@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>This is a course!</title>
-</head>
-<body>
+{% extends 'base_layout.html' %}
+
+{% block content %}
     <h1>That one course with important information!</h1>
     <p>Totally will not become outdated knowledge by graduation!</p>
     <div class="courses">
@@ -15,5 +10,4 @@
         {% endfor %}
     </div>
     <a href="{% url 'grades' course_id=course.Slug %}">View Grades</a>
-</body>
-</html>
+{% endblock %}

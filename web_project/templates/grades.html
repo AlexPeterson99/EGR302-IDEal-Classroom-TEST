@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grades</title>
-</head>
-<body>
+{% extends 'base_layout.html' %}
+
+{% block content %}
     <h1>Grades for {{ course.Title }}</h1>
     <hr>
     <div class="courses">
@@ -19,5 +14,4 @@
             <hr>
         {% endfor %}
     </div>
-</body>
-</html>
+{% endblock %}

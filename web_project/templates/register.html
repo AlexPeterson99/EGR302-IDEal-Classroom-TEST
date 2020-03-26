@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
+{% extends 'base_layout.html' %}
+
+{% block content %}
     <h1>User Registration</h1>
     <p>The time has come to sign your life away!</p>
     <h1>Register</h1>
@@ -14,5 +9,4 @@
         {{ form }}
         <input type="submit" value="Register">
     </form>
-</body>
-</html>
+{% endblock %}

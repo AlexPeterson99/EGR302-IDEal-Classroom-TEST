@@ -1,12 +1,6 @@
-<!-- Created by Austen Combs on Feb 17, 2020 to test page with HTML templates -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
+{% extends 'base_layout.html' %}
+
+{% block content %}
     <h1>This is the login page!</h1>
     <p>As an authorized user, please enter your valid credentials!</p>
     <h1>Login</h1>
@@ -16,5 +10,4 @@
         <input type="submit" value="Login">
     </form>
     <p>New user has joined!</p>
-</body>
-</html>
+{% endblock %}
