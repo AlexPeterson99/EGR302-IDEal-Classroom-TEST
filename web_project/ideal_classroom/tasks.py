@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 def work_please():
+    # pull dates from database and fill in instead of hardcoded values
     d = datetime(2020, 3, 11, 10, 50)
     now = datetime.now()
     if (compare_to(d, now) <= 0):
@@ -29,7 +30,7 @@ def compare_to(date, other):
     
 
 d = datetime(2020, 3, 11, 10, 10)
-schedule.every(5).seconds.do(work_please)
+schedule.every(3).hours.do(work_please)
 
 while True:
     schedule.run_pending()
