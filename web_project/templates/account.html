@@ -2,6 +2,9 @@
 
 {% block content %}
 <h1>User Profile</h1>
+{% if userDetails.isTeacher %}
+    <h1>{{ userDetails.GitHubUsername }}</h1>
+{% endif %}
 <h2>This is the user's main page after login</h2>
 <div class="courses">
     <h3>Courses:</h3>
