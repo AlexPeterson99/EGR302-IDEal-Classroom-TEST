@@ -1,0 +1,30 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+    <h1>{{ course.Title }}</h1>
+    <h2>Grades for {{ assignment.Title }}</h2>
+    <h4>Due On: {{ assignment.DueDate }}</h4>
+    <h4>Possible Points: {{ assignment.PossiblePts }}</h4>
+    <table>
+            <tr>
+                <th>User Info</th>
+                <th>Points</th>
+                <th>Test Run On</th>
+                <th>Comments</th>
+                <th>Chance?</th>
+            </tr>
+        {% for info in submission_info %}
+            <tr>
+                <th>
+                    {{ info.userDetail.Firstname }} {{ info.userDetail.Lastname }}
+                    <br>
+                    {{ info.userDetail.SchoolID }}
+                </th>
+                <td>{{ info.submission.Grade }}</td>
+                <td>{{ info.submission.SubmittedOn }}</td>
+                <td>{{ info.submission.Comments }}</td>
+                <td>{{ info.submission.DidUseExtension }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

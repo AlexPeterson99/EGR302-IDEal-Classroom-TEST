@@ -133,6 +133,35 @@ def assignment_details(request, course_id, assn_name):
     
     return render(request, 'assignment_details.html', {'course':course,'assignment':assignment})
 
+#Custom class used in assignment_grades() to store the info for each submission
+class combinedGradeInfo():
+    def __init__(self):
+        self.submission = None
+        self.userDetail = None
+
+#Shows a list of grades for all students enrolled in the course - Added by Micah Steinbock on March 26, 2020
+def assignment_grades(request, course_id, assn_name):
+    #Get course and assignment info
+    course = Course.objects.get(Slug=course_id)
+    assignment = Assignment.objects.get(Slug=assn_name)
+    #Get all submissions related to this assignment
+    submissions = Submission.objects.filter(AssignmentID = assignment)
+    #Create a blank list of submission info
+    submission_info = []
+    #For each submission entry in the database
+    for submission in submissions:
+        #Get the user detail info
+        user = submission.RosterID.UserID
+        userDetail = UserDetail.objects.get(User = user)
+        #Store the user detail and submission info in a custom object
+        info = combinedGradeInfo()
+        info.submission = submission
+        info.userDetail = userDetail
+        #Add that object into the list
+        submission_info.append(info)
+
+    return render(request, 'assignment_grades.html', {'course':course, 'assignment':assignment, 'submission_info':submission_info})
+
 #Creation page for assignments - Added by Micah Steinbock on March 10, 2020
 def create_assignment(request, course_id):
     course = Course.objects.get(Slug=course_id)
@@ -147,6 +176,7 @@ def create_assignment(request, course_id):
         form = forms.CreateAssignment()
     return render(request, 'create_assignment.html', {'form':form, 'course':course})
 
+#Shows a list of assignments and their grades for each assignment in a course - Added by Micah Steinbock on March 26, 2020
 def grades(request, course_id):
     course = Course.objects.get(Slug=course_id)
     roster = Roster.objects.get(UserID = request.user, CourseID = course)
