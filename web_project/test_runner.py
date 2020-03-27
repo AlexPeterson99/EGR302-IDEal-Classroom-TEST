@@ -42,7 +42,7 @@ def test_print(username, github_id, course_prefix, assignment_prefix, solution_l
     print(username)
     #Creates a new GradeInfo object and fills in the necessary info
     returnVal = GradeInfo()
-    returnVal.passedTests = 2   #Temp Test Data
+    returnVal.passedTests = 3   #Temp Test Data
     returnVal.totalTests = 10   #Temp Test Data
     returnVal.comments = username + ', ' + assignment_link  #Temp Test Data
     #Returns the GradeInfo object
