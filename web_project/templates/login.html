@@ -1,13 +1,21 @@
-{% extends 'base_layout.html' %}
+{% load static %}
 
-{% block content %}
-    <h1>This is the login page!</h1>
-    <p>As an authorized user, please enter your valid credentials!</p>
-    <h1>Login</h1>
-    <form class="site-form" action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Login">
-    </form>
-    <p>New user has joined!</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <title>Login</title>
+    </head>
+     <body>
+        <h1>This is the login page!</h1>
+        <p>As an authorized user, please enter your valid credentials!</p>
+        <h1>Login</h1>
+        <form class="site-form" action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Login">
+        </form>
+    </body>
+</html>

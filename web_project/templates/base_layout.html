@@ -10,8 +10,16 @@
     </head>
      <body>
         <div class="nav">
-            <li>Home</li>
-            <li>Back</li>
+            <li>
+                <button onClick="javascript:history.go(-1)">
+                    Back
+                </button>
+            </li>
+            <li>
+                <button>
+                    Logout
+                </button>
+            </li>
         </div>    
          <div class="wrapper">
              {% block content %}

@@ -12,7 +12,12 @@
         <h1>IDEal Classroom</h1>
         <h2>Hello! Welcome to your new home!</h2>
             <div class="home">
-                <p><button>Login</button></p>
-                <p><button>Register</button></p>
+                <button onclick="location.href='{% url 'login' %}'">
+                    Login
+                </button>
+                <button onclick="location.href='{% url 'register' %}'">
+                    Register
+                </button>
             </div>
-</div>
+    </body>
+</html>
