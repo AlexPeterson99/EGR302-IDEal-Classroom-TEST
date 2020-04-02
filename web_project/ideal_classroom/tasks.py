@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 def work_please():
-    # pull dates from database and fill in instead of hardcoded values
+    # pull dates from database and fill in instead of hardcoded value
     d = datetime(2020, 3, 11, 10, 50)
     now = datetime.now()
     if (compare_to(d, now) <= 0):

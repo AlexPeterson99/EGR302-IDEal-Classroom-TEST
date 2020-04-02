@@ -23,17 +23,19 @@ def login(request):
         form = AuthenticationForm() 
     return render(request, 'login.html', {'form': form})
 
-# User registration page - Updated by Abanoub Farag on Feb 23, 2020
+# User registration page - Updated by Abanoub Farag on March 27, 2020
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = forms.Register(request.POST)
+        second_form = forms.UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            # log the user in
+            instance = form.save(commit=False)
+            instance.save()
             return redirect('account')
     else:
-        form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+        form = forms.Register()
+        second_form = forms.UserCreationForm()
+    return render(request, 'register.html', {'form': form, 'second_form': second_form})
 
 # User account page - Added by Austen Combs on Feb 17, 2020
 def account(request):
@@ -111,9 +113,8 @@ def assignment_details(request, course_id, assn_name):
         GitHubUserName = UserDetail.objects.get(User = request.user).GitHubUsername
         CoursePrefix = course.GitHubPrefix
         AssignmentPrefix = assignment.GitHubPrefix
-        SolutionLink = assignment.SolutionLink
         #Call Code which saves the GradeInfo object to the returnVal object
-        returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix,SolutionLink)
+        returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix)
         #Displays the results of the method call on the webpage as a message response
         messages.add_message(request, messages.INFO, returnVal.comments)
         #If there is already a submission, then overwrite it.
@@ -176,7 +177,6 @@ def create_assignment(request, course_id):
         form = forms.CreateAssignment()
     return render(request, 'create_assignment.html', {'form':form, 'course':course})
 
-#Shows a list of assignments and their grades for each assignment in a course - Added by Micah Steinbock on March 26, 2020
 def grades(request, course_id):
     course = Course.objects.get(Slug=course_id)
     roster = Roster.objects.get(UserID = request.user, CourseID = course)

@@ -1,5 +1,6 @@
 from django import forms
 from . import models
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 #Commented out b/c it does not work with SQL Formatting
 #class MyDateTimeInput(forms.DateTimeInput):
@@ -19,3 +20,8 @@ class CreateAssignment(forms.ModelForm):
 
 class Enroll(forms.Form):
     course_password = forms.CharField(label='Course Enroll Code', max_length=100)
+
+class Register(forms.ModelForm):
+    class Meta:
+        model = models.UserDetail
+        fields = ['Email', 'Firstname', 'Lastname', 'SchoolID', 'GitHubUsername', 'isTeacher']
