@@ -26,16 +26,27 @@ def login(request):
 # User registration page - Updated by Abanoub Farag on March 27, 2020
 def register(request):
     if request.method == 'POST':
-        form = forms.Register(request.POST)
-        second_form = forms.UserCreationForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.save()
+        userInfo = forms.UserCreationForm(request.POST)
+        details = forms.Register(request.POST)
+        if userInfo.is_valid() and details.is_valid():
+            #Save the form data
+            infoInstance = userInfo.save(commit=False)
+            detailsInstance = details.save(commit=False)
+            #Set info in the User table to info gathered in the UserDetail section
+            infoInstance.email = detailsInstance.Email
+            infoInstance.first_name = detailsInstance.Firstname
+            infoInstance.last_name = detailsInstance.Lastname
+            #Save the User entry
+            infoInstance.save()
+            #Link the details to that User entry and save it
+            detailsInstance.User = infoInstance
+            detailsInstance.save()
+            
             return redirect('account')
     else:
-        form = forms.Register()
-        second_form = forms.UserCreationForm()
-    return render(request, 'register.html', {'form': form, 'second_form': second_form})
+        userInfo = forms.UserCreationForm()
+        details = forms.Register()
+    return render(request, 'register.html', {'userInfo': userInfo, 'details': details})
 
 # User account page - Added by Austen Combs on Feb 17, 2020
 def account(request):

@@ -14,9 +14,9 @@
             <p>The time has come to sign your life away!</p>
             <form class="site-form" action="{% url 'register' %}" method="post">
                 {% csrf_token %}
-                {{ form }}
+                {{ userInfo }}
             </br>
-                {{ second_form }}
+                {{ details }}
                 <input type="submit" value="Register">
             </form>
          </div>
