@@ -22,35 +22,39 @@
             <li class="nav-item {% if request.view == 'account' %} active {% endif %}">
               <a class="nav-link" href="{% url 'account' %}">Home <span class="sr-only">(current)</span></a>
             </li>
-            {% if userDetails.isTeacher %}
-                <li class="nav-item {% if request.view == 'create_course' %} active {% endif %}">
-                    <a class="nav-link" href="{% url 'create_course' %}">Create Course</a>
-                </li>
-            {% else %}
-                <li class="nav-item {% if request.view == 'enroll' %} active {% endif %}">
-                    <a class="nav-link" href="{% url 'enroll' %}">Enroll</a>
+            {% if user.is_authenticated %}
+                {% if userDetails.isTeacher %}
+                    <li class="nav-item {% if request.view == 'create_course' %} active {% endif %}">
+                        <a class="nav-link" href="{% url 'create_course' %}">Create Course</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item {% if request.view == 'enroll' %} active {% endif %}">
+                        <a class="nav-link" href="{% url 'enroll' %}">Enroll</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Courses
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        {% for course in courses %}
+                            {% if userDetails.isTeacher %}
+                                <a href="{% url 'course_details' course_id=course.Slug %}" class="dropdown-item">{{ course.Code }} - {{course.Title}}</a>
+                            {% else %}
+                                <a href="{% url 'course_details' course_id=course.CourseID.Slug %}" class="dropdown-item">{{ course.CourseID.Code }} - {{course.CourseID.Title}}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </li>
             {% endif %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Courses
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    {% for course in courses %}
-                        {% if userDetails.isTeacher %}
-                            <a href="{% url 'course_details' course_id=course.Slug %}" class="dropdown-item">{{ course.Code }} - {{course.Title}}</a>
-                        {% else %}
-                            <a href="{% url 'course_details' course_id=course.CourseID.Slug %}" class="dropdown-item">{{ course.CourseID.Code }} - {{course.CourseID.Title}}</a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </li>
           </ul>
         </div>
         <div class="nav navbar-right">
-            <span class="navbar-text border-right pr-2 text-white">
-                Hello, {{ user.username }}
-            </span>
+            {% if user.is_authenticated %}
+                <span class="navbar-text border-right pr-2 text-white">
+                    Hello, {{ user.username }}
+                </span>
+            {% endif %}
 
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}

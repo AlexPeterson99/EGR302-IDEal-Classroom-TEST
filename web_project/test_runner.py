@@ -65,17 +65,17 @@ def test_print(username, github_id, course_prefix, assignment_prefix, solution_l
         # clone calling student's repo
         Repo.clone_from(assignment_link, temp_dir)
 
-        try:
-            Repo.clone_from(solution_link, solution_dir)
-        except:
-            g = git.cmd.Git(solution_dir)
-            g.pull()
+        #try:
+            #Repo.clone_from(solution_link, solution_dir)
+        #except:
+            #g = git.cmd.Git(solution_dir)
+            #g.pull()
         # test repo:
         # get files
         compile.compile(temp_dir, solution_dir)
 
     returnInfo = GradeInfo()
-    returnInfo.comments = "10/10 Compiled Successfully"
+    returnInfo.comments = "Compiled Successfully"
     returnInfo.passedTests = 10
     returnInfo.totalTests = 10
 

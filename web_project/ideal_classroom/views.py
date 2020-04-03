@@ -33,7 +33,7 @@ def login_view(request):
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('home')
+        return redirect('login')
 
 # User registration page - Updated by Abanoub Farag on March 27, 2020
 def register(request):
@@ -86,7 +86,7 @@ def create_course(request):
             instance = form.save(commit=False)
             instance.InstructorID = request.user
             instance.save()
-            return redirect('courses')
+            return redirect('account')
     else:
         form = forms.CreateCourse()
     if userDetails.isTeacher:
@@ -128,7 +128,7 @@ def enroll(request):
                     instance.Classification = "Student"
                     instance.NumExtensions = 3
                     instance.save()
-                    return redirect('courses')
+                    return redirect('account')
                 else:
                     messages.add_message(request, messages.INFO, 'You have already enrolled in this class')
             else:
@@ -271,7 +271,7 @@ def create_assignment(request, course_id):
             instance = form.save(commit=False)
             instance.CourseID = course
             instance.save()
-            return redirect('assignments')
+            return redirect('account')
     else:
         form = forms.CreateAssignment()
 
