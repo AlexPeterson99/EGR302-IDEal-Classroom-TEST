@@ -1,7 +1,7 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-<h1>User Profile</h1>
+<h1>{{userDetails.GitHubUsername}}</h1>
 {% if userDetails.isTeacher %}
     <h1>{{ userDetails.GitHubUsername }}</h1>
 {% endif %}
@@ -10,7 +10,7 @@
     <h3>Courses:</h3>
     {% for course in courses %}
         <div class="course">
-            <p><a href="course">{{course.Title}}</a></p>
+            <li><a href="course">{{course.Title}}</a></li>
         </div>
     {% endfor %}
 </div>
@@ -18,7 +18,7 @@
     <h3>Grades:</h3>
     {% for submit in submits %}
         <div class="grade">
-            <p>{{submit.AssignmentID.Title}}: {{submit.Grade}}</p>
+            <p class="assn">{{submit.AssignmentID.Title}}: {{submit.Grade}}</p>
             <p>- Submitted: {{submit.SubmittedOn}}</p>
         </div>
     {% endfor %}

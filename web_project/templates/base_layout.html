@@ -10,16 +10,18 @@
     </head>
      <body>
         <div class="nav">
-            <li>
-                <button onClick="javascript:history.go(-1)">
-                    Back
-                </button>
-            </li>
-            <li>
-                <button>
-                    Logout
-                </button>
-            </li>
+            <ul>
+                <li>
+                    <button onClick="javascript:history.go(-1)">
+                        Back
+                    </button>
+                </li>
+                <li id="out">
+                    <button onclick="location.href='{% url 'home' %}'">
+                        Logout
+                    </button>
+                </li>
+            </ul>
         </div>    
          <div class="content">
              {% block content %}

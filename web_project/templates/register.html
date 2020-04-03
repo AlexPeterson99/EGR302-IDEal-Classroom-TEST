@@ -9,13 +9,20 @@
         <title>Register</title>
     </head>
      <body>
-         <div>
-            <h1>User Registration</h1>
+        <div class="nav">
+            <li>
+                <button onClick="javascript:history.go(-1)">
+                    Back
+                </button>
+            </li>
+        </div>
+         <div class="register">
+            <h1 class="title">User Registration</h1>
             <p>The time has come to sign your life away!</p>
             <form class="site-form" action="{% url 'register' %}" method="post">
                 {% csrf_token %}
                 {{ userInfo }}
-            </br>
+            </br></br>
                 {{ details }}
                 <input type="submit" value="Register">
             </form>

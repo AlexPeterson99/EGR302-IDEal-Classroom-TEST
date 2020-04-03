@@ -9,7 +9,14 @@
         <title>Login</title>
     </head>
      <body>
-         <div class="login">
+        <div class="nav">
+            <li>
+                <button onClick="javascript:history.go(-1)">
+                    Back
+                </button>
+            </li>
+        </div>
+         <div class="content">
             <h1>IDEal Classroom</h1>
             <p>As an authorized user, please enter your valid credentials!</p>
             <form class="site-form" action="{% url 'login' %}" method="post">

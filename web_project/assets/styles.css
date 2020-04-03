@@ -2,6 +2,14 @@ body{
     background:rgb(64, 64, 64);
 }
 
+li{
+    display: inline;
+}
+
+li#out{
+    margin-left: 90%;
+}
+
 div.content{
     background-color: rgba(255, 255, 255, 0.2);
     margin-left: 700px;
@@ -12,14 +20,35 @@ div.content{
     text-align: center;
 }
 
-div.login{
+div.register{
     background-color: rgba(255, 255, 255, 0.2);
-    margin-left: 700px;
-    margin-right: 700px;
+    margin-left: 500px;
+    margin-right: 500px;
     margin-top: 10%;
     padding-top: 20px;
     padding-bottom: 20px;
+    padding-left: 30px;
+    text-align: left;
+}
+
+.title{
     text-align: center;
+}
+
+div.course{
+    text-align: justify;
+    font-size: 20px;
+    margin-left: 35%;
+}
+
+div.grade{
+    text-align: justify;
+    font-size: 18px;
+    margin-left: 20%;
+}
+
+p.assn{
+    text-decoration: underline;
 }
 
 table, th, td {
