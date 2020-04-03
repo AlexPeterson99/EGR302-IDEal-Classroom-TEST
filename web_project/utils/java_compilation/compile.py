@@ -16,13 +16,15 @@
 
 import os
 import subprocess
+from pathlib import Path
+import time
 
 #The absolute path of where junit is located.
 #Junit us a dependency for compiling JUnit test classes
-JUNIT_HOME = "java_dependencies\junit-4.13.jar"
+JUNIT_HOME = "C:\\Users\\bigmo\OneDrive\Desktop\IDEal-Classroom\IDEal-Classroom\web_project\\utils\java_compilation\java_dependencies\junit-4.13.jar"
 #The absolute path of where hamcrest is located.
 #hamcrest is a dependency for compiling Junit.
-HAMCREST_HOME = "java_dependencies\hamcrest-core-1.3.jar"
+HAMCREST_HOME = "C:\\Users\\bigmo\OneDrive\Desktop\IDEal-Classroom\IDEal-Classroom\web_project\\utils\java_compilation\java_dependencies\junit-4.13.jar"
 
 #The time to allow a test to run before declaring a fail result.
 #This is handy if the JAVA class being tested has an infinite loop or buggy code.
@@ -31,80 +33,73 @@ TEST_TIMEOUT = 10
 
 
 
-# This method compiles a single java class.
-# Compiling .java file creates a .class file for the same file.
-# The .class file is the compiled result.
-#
-# Uses subprocess to execute command line processes.
+#The time to allow a test to run before declaring a fail result.
+#This is handy if the JAVA class being tested has an infinite loop or buggy code.
+TEST_TIMEOUT = 10
+
+
+# This method retrieves all .java source files found in a given directory
 #
 #   pre:
-#       - source_file is the absolute path location of the JAVA class to compile.
+#       - temp_dir is the temp path of the repository to be tested.
+#       - default cwd when called: C:\Users\Alex\Desktop\IDEalClassroom\IDEal-Classroom\web_project
 #   post:
-#       - creates a .class file of source_file.
-#       - raises compilationError if compiling source_file is unsuccessful.
-#
-def compile_java_class(source_file):
-    result = subprocess.run('javac {source_file}'.format(source_file = source_file))
-    if result.returncode != 0:
-        raise CompilationError
+#       - raises FileNotFoundError if temp_dir is not valid.
+#       - returns a list of source files.
+def get_src_files(temp_dir):
+    cwd = os.getcwd()
+    os.chdir(temp_dir)
+    try:
+        source_files = [ fn for fn in os.listdir('src') if fn[-5:] == '.java']
+        print('src: ' + source_files[0])
+        return source_files
+    except FileNotFoundError:
+        pass
+    finally:
+        os.chdir(cwd)
 
 
-# This method compiles a single java test class.
-# Compiling .java file creates a .class file for the same file.
-# The .class file is the compiled result.
-#
-# Uses subprocess to execute command line processes.
+# This method retrieves ***ONE*** .java tst files found in the instructor repository
 #
 #   pre:
-#       - test_file is the absolute path location of the JAVA class to compile.
-#       - requires JUnit and Hamcrest dependencies.
+#       - tst_location is the path of the instructor repository.
 #   post:
-#       - creates a .class file of test_file.
-#       - raises compilationError if compiling source_file is unsuccessful.
-#
-def compile_java_test(test_file):
-    result = subprocess.run('javac -cp .;{JUNIT_HOME};{HAMCREST_HOME} {test_file}'.format(JUNIT_HOME = JUNIT_HOME, HAMCREST_HOME = HAMCREST_HOME, test_file = test_file))
-    if result.returncode != 0:
-        raise CompilationError
+#       - raises FileNotFoundError if tst_location is not valid.
+#       - returns a list of tst files.
+def get_tst_file(cwd, tst_location):
+    direct = os.getcwd()
+    os.chdir(cwd)
+    path = tst_location + '\\tst\\'
+    try:
+        tst_file = [file for file in os.listdir(path) if file.endswith('.java')]
+        # creates an absolute path
+        print(os.getcwd() + path + tst_file[0])
+        return os.getcwd() + path + tst_file[0]
+    except FileNotFoundError:
+        pass
+    finally:
+        os.chdir(direct)
 
+def compile(temp_dir, solution_dir):
+    try:
+        cwd = os.getcwd()
+        os.chdir(temp_dir + '\src\\')
+        src_files = get_src_files(temp_dir)
+        tst_file = get_tst_file(cwd, solution_dir)
+        print('tst: ' + tst_file)
+        #os.chdir(cwd)
+        print(os.getcwd())
+        subprocess.run('javac -cp {file}'.format(file= src_files[0]))
+        
+        #print('we got here. It might have compiled :)')
 
-# This method runs a single java class.
-# Uses subprocess to execute command line processes.
-# Runs JUnit test class, and outputs test results to the command line interface.
-#
-#   pre:
-#       - junit_class is the absolute path location of the test class to run.
-#       - requires JUnit and Hamcrest dependencies.
-#   post:
-#       - outputs test results to the command line interface.
-#       - saves a copy of the output results to a text file, for later data analysis.
-#       - throws exception if the tests take longer than the allowed time to complete.(in case of poor java implementation)
-#   returns:
-#       - test result output.
-def run(junit_class):
-    output = "out.txt"
-    with open(output, 'w') as stdout_file:
-        try:
-            result = subprocess.run('java -cp .;{JUNIT_HOME};{HAMCREST_HOME} org.junit.runner.JUnitCore {junit_class}'.format(JUNIT_HOME = JUNIT_HOME, HAMCREST_HOME = HAMCREST_HOME, junit_class = junit_class), stdout=stdout_file, timeout=TEST_TIMEOUT)
-        except subprocess.TimeoutExpired:
-            return 'TEST TIMED OUT'
-    with open(output) as f:
-        return f.read()
-
-
-# Compiles and runs java class and associated test at once.
-#   pre:
-#       - source_file is the java class file.
-#       - test_file is the test class file.
-#   post:
-#       - returns response based on test ressult success.
-#
-def run_tests(source_file, test_file):
-    compile_java_class(source_file)
-    compile_java_test(test_file)
-    results = run(test_file[0:-5])
-    return 'Good job! No Tests Failed.' if is_passing(results) else 'You done oofed!\n\n' + results
-
+    except subprocess.TimeoutExpired:
+        pass
+    except FileNotFoundError:
+        pass
+    finally:
+        print(os.getcwd())
+        os.chdir(cwd)
 
 #   Determins if ALL tests passed, or if there are failing tests.
 #   pre:

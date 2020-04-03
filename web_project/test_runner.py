@@ -11,8 +11,16 @@
 # 
 
 #imports
-#import compile
-#import clone
+import os
+from datetime import datetime
+import git
+from git import Repo
+import tempfile
+import contextlib
+import shutil, stat
+import time
+import subprocess
+from utils.java_compilation import compile
 
 
 # GradeInfo created by Micah Steinbock on March 26, 2020
@@ -35,21 +43,53 @@ class GradeInfo:
 #   github_id = the github username of the currently logged in user
 #   course_prefix = the slug for the github classroom prefix
 #   assignment_prefix = the slug for the assignment code
-def test_print(username, github_id, course_prefix, assignment_prefix, solution_link):
-    assignment_link = 'https://github.com/{CoursePrefix}/{AssignmentPrefix}-{GitHubId}'.format(GitHubId=github_id,CoursePrefix=course_prefix,AssignmentPrefix=assignment_prefix)
-    print(solution_link)
-    print(assignment_link)
-    print(username)
+#def test_print(username, github_id, course_prefix, assignment_prefix, solution_link):
+    #assignment_link = 'https://github.com/{CoursePrefix}/{AssignmentPrefix}-{GitHubId}'.format(GitHubId=github_id,CoursePrefix=course_prefix,AssignmentPrefix=assignment_prefix)
+    #print(solution_link)
+    #print(assignment_link)
+    #print(username)
     #Creates a new GradeInfo object and fills in the necessary info
-    returnVal = GradeInfo()
-    returnVal.passedTests = 3   #Temp Test Data
-    returnVal.totalTests = 10   #Temp Test Data
-    returnVal.comments = username + ', ' + assignment_link  #Temp Test Data
+    #returnVal = GradeInfo()
+    #returnVal.passedTests = 3   #Temp Test Data
+    #returnVal.totalTests = 10   #Temp Test Data
+    #returnVal.comments = username + ', ' + assignment_link  #Temp Test Data
     #Returns the GradeInfo object
-    return returnVal
+    #return returnVal
 
-#Pass through information to run tests
-#def test_runner(github_id, student_name, assignment, course):
-    #clone.cloneGit()   #params need to be fixed. Should not run correctly. 
-    
-    #pass
+def test_print(username, github_id, course_prefix, assignment_prefix, solution_link):
+    #Temporary File to store users code
+    with make_temp_directory() as temp_dir:
+        assignment_link = 'https://github.com/{CoursePrefix}/{AssignmentPrefix}-{GitHubId}'.format(GitHubId=github_id,CoursePrefix=course_prefix,AssignmentPrefix=assignment_prefix)
+        solution_dir = '\\solution\{course}\{assignment}'.format(course=course_prefix, assignment=assignment_prefix)
+
+        # clone calling student's repo
+        Repo.clone_from(assignment_link, temp_dir)
+
+        try:
+            Repo.clone_from(solution_link, solution_dir)
+        except:
+            g = git.cmd.Git(solution_dir)
+            g.pull()
+        # test repo:
+        # get files
+        compile.compile(temp_dir, solution_dir)
+
+    return username + ', ' + assignment_link + ',  COMPILED SUCCESSFULLY'
+
+# Helper: handles temp dir creation and clean up
+@contextlib.contextmanager
+def make_temp_directory():
+    temp_dir = tempfile.mkdtemp()
+    try:
+        yield temp_dir
+    finally:
+        shutil.rmtree(temp_dir, onerror = on_rm_error)
+
+# Helper: handles permission errors when deleting files files from a temp location
+def on_rm_error( func, path, exc_info):
+    os.chmod( path, stat.S_IWRITE )
+    os.unlink( path)
+
+
+
+test_runner("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")
