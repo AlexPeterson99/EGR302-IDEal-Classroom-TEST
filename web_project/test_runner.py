@@ -80,6 +80,7 @@ def test_print(username, github_id, course_prefix, assignment_prefix, solution_l
     returnInfo.totalTests = 10
 
     return returnInfo
+    #now?
 # Helper: handles temp dir creation and clean up
 @contextlib.contextmanager
 def make_temp_directory():
