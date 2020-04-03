@@ -5,9 +5,9 @@
 {% if userDetails.isTeacher %}
     <h1>{{ userDetails.GitHubUsername }}</h1>
 {% endif %}
-<h2>This is the user's main page after login</h2>
+
 <div class="courses">
-    <h3>Courses:</h3>
+    <h2 id="header">Courses:</h2>
     {% for course in courses %}
         <div class="course">
             <li><a href="course">{{course.Title}}</a></li>
@@ -15,7 +15,7 @@
     {% endfor %}
 </div>
 <div class="grades">
-    <h3>Grades:</h3>
+    <h2 id="header">Grades:</h2>
     {% for submit in submits %}
         <div class="grade">
             <p class="assn">{{submit.AssignmentID.Title}}: {{submit.Grade}}</p>
