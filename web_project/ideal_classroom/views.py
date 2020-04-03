@@ -64,13 +64,19 @@ def register(request):
 @login_required(login_url="login")
 def account(request):
     userDetails = UserDetail.objects.get(User = request.user)
-    return render(request, "account.html", {'userDetails': userDetails})
+    setattr(request, 'view', 'account')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, "account.html", {'userDetails': userDetails,'courses':courses})
 
 #Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
 @login_required(login_url="login")
 def create_course(request):
     #Only allow teachers to navigate to this page
     userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'create_course')
     if not userDetails.isTeacher:
         return redirect('account')
 
@@ -83,12 +89,18 @@ def create_course(request):
             return redirect('courses')
     else:
         form = forms.CreateCourse()
-    return render(request, 'create_course.html', {'form':form})
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, 'create_course.html', {'form':form,'userDetails':userDetails,'courses':courses})
 
 # Will show a list of all courses that the user is enrolled in - Added by Austen Combs on Feb 20, 2020
+#Temp removed by Micah Steinbock on April 3, 2020
 @login_required(login_url="login")
 def courses(request):
     userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'courses')
     if userDetails.isTeacher:
         courses = Course.objects.filter(InstructorID = request.user)
     else:
@@ -98,6 +110,8 @@ def courses(request):
 #Page where a student can enroll in a course - Added by Micah Steinbock on March 12, 2020
 @login_required(login_url="login")
 def enroll(request):
+    userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'enroll')
     if request.method == 'POST':
         form = forms.Enroll(request.POST)
         if form.is_valid():
@@ -122,37 +136,58 @@ def enroll(request):
                 messages.add_message(request, messages.INFO, 'Invalid Course Enrollment Code')
     else:
         form = forms.Enroll()
-    return render(request, 'enroll.html', {'form':form})
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, 'enroll.html', {'form':form,'userDetails':userDetails,'courses':courses})
 
 # user page where the details are displayed for 1 course - Added by Micah Steinbock on March 19, 2020
 @login_required(login_url="login")
 def course_details(request, course_id):
     course = Course.objects.get(Slug=course_id)
+    assignments = Assignment.objects.filter(CourseID = course)
     userDetails = UserDetail.objects.get(User = request.user)
-    return render(request, 'course_details.html', {'course':course, 'userDetails':userDetails})
+    setattr(request, 'view', 'course_details')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, 'course_details.html', {'course':course,'assignments':assignments, 'userDetails':userDetails,'courses':courses})
 
 # Will show a list of all assignments that are in the given course - Added by Austen Combs on Feb 20, 2020
+# Temp removed by Micah Steinbock on April 3, 2020
 @login_required(login_url="login")
 def assignments(request, course_id):
     course = Course.objects.get(Slug=course_id)
     assignments = Assignment.objects.filter(CourseID = course)
     userDetails = UserDetail.objects.get(User = request.user)
-    return render(request, "assignment.html", {'course':course, 'assignments':assignments, 'userDetails':userDetails})
+    setattr(request, 'view', 'assignments')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, "assignment.html", {'course':course, 'assignments':assignments, 'userDetails':userDetails,'courses':courses})
 
 # user page where the details are displayed for 1 assignment - Added by Micah Steinbock on March 19, 2020
 @login_required(login_url="login")
 def assignment_details(request, course_id, assn_name):
     userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'assignment_details')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
     if userDetails.isTeacher:
         course = Course.objects.get(Slug=course_id)
         assignment = Assignment.objects.get(Slug= assn_name)
-        return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'userDetails':userDetails})
+        return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'userDetails':userDetails,'courses':courses})
     else:
         #Student View
         course = Course.objects.get(Slug=course_id)
         assignment = Assignment.objects.get(Slug= assn_name)
         roster = Roster.objects.get(UserID = request.user, CourseID = course)
-        pastSubmission = Submission.objects.get(AssignmentID = assignment, RosterID = roster)
+        pastSubmission = Submission.objects.filter(AssignmentID = assignment, RosterID = roster)
         if request.method == 'POST':
             #Define parameters
             Username = request.user.username
@@ -178,7 +213,7 @@ def assignment_details(request, course_id, assn_name):
             instance.Comments = returnVal.comments
             instance.DidUseExtension = True
             instance.save()
-        return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'pastSubmission':pastSubmission,'userDetails':userDetails})
+        return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'pastSubmission':pastSubmission,'userDetails':userDetails,'courses':courses})
 
 #Custom class used in assignment_grades() to store the info for each submission
 class combinedGradeInfo():
@@ -191,6 +226,7 @@ class combinedGradeInfo():
 def assignment_grades(request, course_id, assn_name):
     #Only allow teachers to navigate to this page
     userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'assignment_grades')
     if not userDetails.isTeacher:
         return redirect('account')
     
@@ -213,13 +249,18 @@ def assignment_grades(request, course_id, assn_name):
         #Add that object into the list
         submission_info.append(info)
 
-    return render(request, 'assignment_grades.html', {'course':course, 'assignment':assignment, 'submission_info':submission_info})
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, 'assignment_grades.html', {'course':course, 'assignment':assignment, 'submission_info':submission_info, 'userDetails':userDetails,'courses':courses})
 
 #Creation page for assignments - Added by Micah Steinbock on March 10, 2020
 @login_required(login_url="login")
 def create_assignment(request, course_id):
     #Only allow teachers to navigate to this page
     userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'create_assignment')
     if not userDetails.isTeacher:
         return redirect('account')
     
@@ -233,11 +274,22 @@ def create_assignment(request, course_id):
             return redirect('assignments')
     else:
         form = forms.CreateAssignment()
-    return render(request, 'create_assignment.html', {'form':form, 'course':course})
+
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, 'create_assignment.html', {'form':form, 'course':course, 'userDetails':userDetails,'courses':courses})
 
 @login_required(login_url="login")
 def grades(request, course_id):
+    userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'grades')
     course = Course.objects.get(Slug=course_id)
     roster = Roster.objects.get(UserID = request.user, CourseID = course)
     grades = Submission.objects.filter(RosterID = roster)
-    return render(request, 'grades.html', {'course':course, 'grades':grades})
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, 'grades.html', {'course':course, 'grades':grades,'userDetails':userDetails,'courses':courses})

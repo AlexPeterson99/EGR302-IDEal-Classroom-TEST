@@ -1,31 +1,19 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-<h1>That one course with important information!</h1>
-<p>Totally will not become outdated knowledge by graduation!</p>
 
-<br>
-{% if userDetails.isTeacher %}
-    <div class="courses">
-        {% for course in courses %}
+{% for course in courses %}
+    {% if userDetails.isTeacher %}
         <h3><a href="{% url 'course_details' course_id=course.Slug %}">{{course.Title}}</a></h3>
-            <div class="course">
-                <p>{{course.Description}}</p>
-            </div>
-        {% endfor %}
-    </div>
-    <br>
-    <a href="{% url 'create_course' %}">Create a Course</a>
-{% else %}
-    <div class="courses">
-        {% for course in courses %}
+        <div class="course">
+            <p>{{course.Description}}</p>
+        </div>
+    {% else %}
         <h3><a href="{% url 'course_details' course_id=course.CourseID.Slug %}">{{course.CourseID.Title}}</a></h3>
-            <div class="course">
-                <p>{{course.CourseID.Description}}</p>
-            </div>
-        {% endfor %}
-    </div>
-    <br>
-    <a href="{% url 'enroll' %}">Enroll in a Course</a>
-{% endif %}
+        <div class="course">
+            <p>{{course.CourseID.Description}}</p>
+        </div>
+    {% endif %}
+{% endfor %}
+
 {% endblock %}

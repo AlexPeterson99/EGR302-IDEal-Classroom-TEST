@@ -1,33 +1,45 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-<h1>{{userDetails.User.username}}</h1>
-{% if userDetails.isTeacher %}
-    <h1>{{ userDetails.GitHubUsername }}</h1>
-    <a href="{% url 'create_course' %}">Create a Course</a>
-{% endif %}
-<br>
-<a href="{% url 'courses' %}">View Courses</a>
 
-<!--
-    Commented out by Micah Steinbock on April 2, 2020
-    Reason: This is all wrong
-<div class="courses">
-    <h2 id="header">Courses:</h2>
-    {% for course in courses %}
-        <div class="course">
-            <li><a href="course">{{course.Title}}</a></li>
-        </div>
-    {% endfor %}
+<div class="row">
+    <div class="col-sm-6 left">
+        <ul class="list-group p-3">
+            <li class="list-group-item list-group-item-action active disabled">My Courses</li>
+            {% if courses %}
+                {% for course in courses %}
+                    {% if userDetails.isTeacher %}
+                        <a href="{% url 'course_details' course_id=course.Slug %}" class="list-group-item list-group-item-action">{{ course.Code }} - {{course.Title}}</a>
+                    {% else %}
+                        <a href="{% url 'course_details' course_id=course.CourseID.Slug %}" class="list-group-item list-group-item-action">{{ course.CourseID.Code }} - {{course.CourseID.Title}}</a>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% if userDetails.isTeacher %}
+                    <a href="#" class="list-group-item list-group-item-action disabled">You are not instructing any courses</a>
+                {% else %}
+                    <a href="#" class="list-group-item list-group-item-action disabled">You are not enrolled in any courses</a>
+                {% endif %}
+            {% endif %}
+        </ul>
+        {% if userDetails.isTeacher %}
+            <a class="btn btn-primary ml-3" href="{% url 'create_course' %}" role="button">Create a Course</a>
+        {% else %}
+            <a class="btn btn-primary ml-3" href="{% url 'enroll' %}" role="button">Enroll in a Course</a>
+        {% endif %}
+    </div>
+    <div class="col-sm-6 right">
+        <ul class="list-group p-3">
+            <li class="list-group-item list-group-item-action active disabled">User Information:</li>
+            <li class="list-group-item list-group-item-action disabled">Name: {{ userDetails.Firstname }} {{ userDetails.Lastname }}</li>
+            <li class="list-group-item list-group-item-action disabled">Username: {{ userDetails.User.username }}</li>
+            <li class="list-group-item list-group-item-action disabled">Email: {{ userDetails.Email }}</li>
+            <li class="list-group-item list-group-item-action disabled">School ID: {{ userDetails.SchoolID}}</li>
+            <li class="list-group-item list-group-item-action disabled">Github Username: {{ userDetails.GitHubUsername }}</li>
+        </ul>
+        <a class="btn btn-primary ml-3" href="#" onclick="alert('This feature is a WIP')" role="button">Edit Info</a>
+    </div>
 </div>
-<div class="grades">
-    <h2 id="header">Grades:</h2>
-    {% for submit in submits %}
-        <div class="grade">
-            <p class="assn">{{submit.AssignmentID.Title}}: {{submit.Grade}}</p>
-            <p>- Submitted: {{submit.SubmittedOn}}</p>
-        </div>
-    {% endfor %}
-</div>
+
+
 {% endblock %}
--->

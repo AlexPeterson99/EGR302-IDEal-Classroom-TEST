@@ -1,46 +1,53 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-    <div class="assignments">
-        <h1>{{ course.Title }}</h1>
-        <h3>{{ assignment.Title }}</h3>
-        <p>{{ assignment.Description }}</p>
-        <h4>Due: {{ assignment.DueDate }}</h4>
-        <h4>Pts Possible: {{ assignment.PossiblePts }}</h4>
-        <h4># Attempts: {{ assignment.NumAttempts }}</h4>
-        {% if pastSubmission %}
-            <table>
-                <tr>
-                    <th>Submitted On:</th>
-                    <td>{{ pastSubmission.SubmittedOn }}</td>
-                </tr>
-                <tr>
-                    <th>Grade:</th>
-                    <td>{{ pastSubmission.Grade }} / {{ assignment.PossiblePts }}</td>
-                </tr>
-                <tr>
-                    <th>Comments:</th>
-                    <td>{{ pastSubmission.Comments }}</td>
-                </tr>
-            </table>
-            <br><br>
-        {% endif %}
-        
-        {% if userDetails.isTeacher %}
-            <a href="{% url 'assignment_grades' course_id=course.Slug assn_name=assignment.Slug %}">View Grades</a>
-        {% else %}
-            <form class="site-form" action="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Test My Code!">
-            </form>
-        {% endif %}
-    </div>
-    <!-- Message alert with return value from test_runner.py-->
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+    
+<div class="text-center m-5">
+    <h1>{{ course.Code }} - {{ course.Title }}</h1>
+    <h2>{{ assignment.Title }}</h2>
+    <p>{{ assignment.Description }}</p>
+    <h4>Due: {{ assignment.DueDate }}</h4>
+    <h4>Pts Possible: {{ assignment.PossiblePts }}</h4>
+    <h4># Attempts: {{ assignment.NumAttempts }}</h4>
+</div>
+
+<ul class="list-group w-50 m-auto">
+    {% if pastSubmission %}
+        <table class="w-100">
+            <tr>
+                <th>Submitted On:</th>
+                <td>{{ pastSubmission.SubmittedOn }}</td>
+            </tr>
+            <tr>
+                <th>Grade:</th>
+                <td>{{ pastSubmission.Grade }} / {{ assignment.PossiblePts }}</td>
+            </tr>
+            <tr>
+                <th>Comments:</th>
+                <td>{{ pastSubmission.Comments }}</td>
+            </tr>
+        </table>
+        <br><br>
     {% endif %}
+</ul>
+
+<div class="text-center pt-5">
+    {% if userDetails.isTeacher %}
+        <a href="{% url 'assignment_grades' course_id=course.Slug assn_name=assignment.Slug %}">View Grades</a>
+    {% else %}
+        <form class="site-form" action="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Test My Code!">
+        </form>
+    {% endif %}
+</div>
+<!-- Message alert for if the "password" is invalid-->
+{% if messages %}
+<ul class="messages p-5">
+    {% for message in messages %}
+    <div class="alert alert-danger w-50 mx-auto text-center" role="alert">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}

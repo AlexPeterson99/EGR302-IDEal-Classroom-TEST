@@ -1,11 +1,17 @@
 {% extends 'base_layout.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
-    <h1>Create an assignment here!</h1>
+    
+<div class="w-75 mx-auto my-3">
+    <h1>Create an assignment!</h1>
     <p>Note: All Date-times must be inputted in format: 2020-03-10 18:45:00.000000</p>
     <form class="site-form" action="{% url 'create_assignment' course_id=course.Slug %}" method="post">
         {% csrf_token %}
-        {{ form }}
+        {{ form|crispy }}
         <input type="submit" value="Create Assignment">
-    </form>
+    </form>    
+</div>
+
 {% endblock %}

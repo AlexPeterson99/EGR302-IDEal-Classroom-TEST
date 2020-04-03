@@ -1,18 +1,31 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-    <div class="courses">
-        <h1>{{ course.Code }} - {{ course.Title }}</h1>
-        <h3>{{ course.Description }}</h3>
-        <h3>Instructor: <a href="mailto:{{ course.InstructorID.email }}">{{ course.InstructorID.first_name }} {{ course.InstructorID.last_name }}</a></h3>
-        <hr>
-        <h3><a href="{% url 'assignments' course_id=course.Slug %}">View Assignments</a></h3>
 
-        
-    </div>
-    {% if userDetails.isTeacher %}
-        <h3><a href="{% url 'create_assignment' course_id=course.Slug %}">Create Assignment</a></h3>
+<div class="text-center m-5">
+    <h1>{{ course.Code }} - {{ course.Title }}</h1>
+    <h5 class="w-50 mx-auto">{{ course.Description }}</h5>
+    <h3>Instructor: <a href="mailto:{{ course.InstructorID.email }}">{{ course.InstructorID.first_name }} {{ course.InstructorID.last_name }}</a></h3>
+</div>
+
+<ul class="list-group w-50 m-auto">
+    <li class="list-group-item list-group-item-action active disabled">Assignments</li>
+    {% if assignments %}
+        {% for assignment in assignments %}
+            <a href="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" class="list-group-item list-group-item-action">{{ assignment.Title }}</a>
+        {% endfor %}
     {% else %}
-        <h3><a href="{% url 'grades' course_id=course.Slug %}">View Grades</a></h3>
+        <a href="#" class="list-group-item list-group-item-action disabled">There are no assignments for this course</a>
     {% endif %}
+</ul>
+
+<div class="text-center pt-5">
+    {% if userDetails.isTeacher %}
+        <a class="btn btn-primary" href="{% url 'create_assignment' course_id=course.Slug %}" role="button">Create Assignment</a>
+    {% else %}
+        <a class="btn btn-primary" href="{% url 'grades' course_id=course.Slug %}" role="button">View Grades</a>
+    {% endif %}
+</div>
+
+
 {% endblock %}

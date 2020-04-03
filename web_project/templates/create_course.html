@@ -1,10 +1,16 @@
 {% extends 'base_layout.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
-<h1>Create a course here!</h1>
-<form class="site-form" action="{% url 'create_course' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Create Course">
-</form>
+
+<div class="w-75 mx-auto my-3">
+    <h1>Create a course!</h1>
+    <form class="site-form" action="{% url 'create_course' %}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Create Course">
+    </form>
+</div>
+
 {% endblock %}
