@@ -74,8 +74,12 @@ def test_print(username, github_id, course_prefix, assignment_prefix, solution_l
         # get files
         compile.compile(temp_dir, solution_dir)
 
-    return username + ', ' + assignment_link + ',  COMPILED SUCCESSFULLY'
+    returnInfo = GradeInfo()
+    returnInfo.comments = "10/10 Compiled Successfully"
+    returnInfo.passedTests = 10
+    returnInfo.totalTests = 10
 
+    return returnInfo
 # Helper: handles temp dir creation and clean up
 @contextlib.contextmanager
 def make_temp_directory():
@@ -89,7 +93,3 @@ def make_temp_directory():
 def on_rm_error( func, path, exc_info):
     os.chmod( path, stat.S_IWRITE )
     os.unlink( path)
-
-
-
-test_runner("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")
