@@ -5,7 +5,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^$', views.home, name="home"),
-    url(r'^login/$', views.login, name="login"),
+    url(r'^login/$', views.login_view, name="login"),
+    url(r'^logout/$', views.logout_view, name="logout"),
     url(r'^register/$', views.register, name="register"),
     url(r'^account/$', views.account, name="account"),
     url(r'^create_course/$', views.create_course, name="create_course"),

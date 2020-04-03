@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from .models import Course, Roster, Assignment, Submission, AuthUser, UserDetail
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from . import forms
 from django.contrib import messages
 from test_runner import test_print
@@ -13,15 +15,25 @@ def home(request):
     return render(request, "home.html")
 
 # Login form page - Updated by Abanoub Farag on Feb 23, 2020
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            # log the user in
-            return redirect('account')
+            user = form.get_user()
+            login(request, user)
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('account')
     else:
         form = AuthenticationForm() 
     return render(request, 'login.html', {'form': form})
+
+# Logout page - Created by Micah Steinbock on April 2, 2020
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
 
 # User registration page - Updated by Abanoub Farag on March 27, 2020
 def register(request):
@@ -41,7 +53,7 @@ def register(request):
             #Link the details to that User entry and save it
             detailsInstance.User = infoInstance
             detailsInstance.save()
-            
+            login(request, infoInstance)
             return redirect('account')
     else:
         userInfo = forms.UserCreationForm()
@@ -49,14 +61,19 @@ def register(request):
     return render(request, 'register.html', {'userInfo': userInfo, 'details': details})
 
 # User account page - Added by Austen Combs on Feb 17, 2020
+@login_required(login_url="login")
 def account(request):
     userDetails = UserDetail.objects.get(User = request.user)
-    courses = Course.objects.all()
-    submits = Submission.objects.all()
-    return render(request, "account.html", {'userDetails': userDetails, 'courses': courses, 'submits': submits})
+    return render(request, "account.html", {'userDetails': userDetails})
 
 #Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
+@login_required(login_url="login")
 def create_course(request):
+    #Only allow teachers to navigate to this page
+    userDetails = UserDetail.objects.get(User = request.user)
+    if not userDetails.isTeacher:
+        return redirect('account')
+
     if request.method == 'POST':
         form = forms.CreateCourse(request.POST)
         if form.is_valid():
@@ -69,11 +86,17 @@ def create_course(request):
     return render(request, 'create_course.html', {'form':form})
 
 # Will show a list of all courses that the user is enrolled in - Added by Austen Combs on Feb 20, 2020
+@login_required(login_url="login")
 def courses(request):
-    enrolled_courses = Roster.objects.filter(UserID = request.user)
-    return render(request, "course.html", {'enrolled_courses':enrolled_courses})
+    userDetails = UserDetail.objects.get(User = request.user)
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    return render(request, "course.html", {'courses':courses, 'userDetails':userDetails})
 
 #Page where a student can enroll in a course - Added by Micah Steinbock on March 12, 2020
+@login_required(login_url="login")
 def enroll(request):
     if request.method == 'POST':
         form = forms.Enroll(request.POST)
@@ -102,48 +125,60 @@ def enroll(request):
     return render(request, 'enroll.html', {'form':form})
 
 # user page where the details are displayed for 1 course - Added by Micah Steinbock on March 19, 2020
+@login_required(login_url="login")
 def course_details(request, course_id):
     course = Course.objects.get(Slug=course_id)
-    assignments = Assignment.objects.filter(CourseID = course)
-    return render(request, 'course_details.html', {'course':course, 'assignments':assignments})
+    userDetails = UserDetail.objects.get(User = request.user)
+    return render(request, 'course_details.html', {'course':course, 'userDetails':userDetails})
 
 # Will show a list of all assignments that are in the given course - Added by Austen Combs on Feb 20, 2020
+@login_required(login_url="login")
 def assignments(request, course_id):
     course = Course.objects.get(Slug=course_id)
     assignments = Assignment.objects.filter(CourseID = course)
-    return render(request, "assignment.html", {'course':course, 'assignments':assignments})
+    userDetails = UserDetail.objects.get(User = request.user)
+    return render(request, "assignment.html", {'course':course, 'assignments':assignments, 'userDetails':userDetails})
 
 # user page where the details are displayed for 1 assignment - Added by Micah Steinbock on March 19, 2020
+@login_required(login_url="login")
 def assignment_details(request, course_id, assn_name):
-    course = Course.objects.get(Slug=course_id)
-    assignment = Assignment.objects.get(Slug= assn_name)
-
-    if request.method == 'POST':
-        #Define parameters
-        Username = request.user.username
-        GitHubUserName = UserDetail.objects.get(User = request.user).GitHubUsername
-        CoursePrefix = course.GitHubPrefix
-        AssignmentPrefix = assignment.GitHubPrefix
-        #Call Code which saves the GradeInfo object to the returnVal object
-        returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix)
-        #Displays the results of the method call on the webpage as a message response
-        messages.add_message(request, messages.INFO, returnVal.comments)
-        #If there is already a submission, then overwrite it.
+    userDetails = UserDetail.objects.get(User = request.user)
+    if userDetails.isTeacher:
+        course = Course.objects.get(Slug=course_id)
+        assignment = Assignment.objects.get(Slug= assn_name)
+        return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'userDetails':userDetails})
+    else:
+        #Student View
+        course = Course.objects.get(Slug=course_id)
+        assignment = Assignment.objects.get(Slug= assn_name)
         roster = Roster.objects.get(UserID = request.user, CourseID = course)
-        submission = Submission.objects.filter(AssignmentID = assignment, RosterID = roster)
-        if submission.count() > 0:
-            submission.delete()
-        #Adds the grade into the database
-        instance = Submission()
-        instance.AssignmentID = assignment
-        instance.RosterID = roster
-        instance.SubmittedOn = datetime.now()
-        instance.Grade = (returnVal.passedTests / returnVal.totalTests) * assignment.PossiblePts
-        instance.Comments = returnVal.comments
-        instance.DidUseExtension = True
-        instance.save()
-    
-    return render(request, 'assignment_details.html', {'course':course,'assignment':assignment})
+        pastSubmission = Submission.objects.get(AssignmentID = assignment, RosterID = roster)
+        if request.method == 'POST':
+            #Define parameters
+            Username = request.user.username
+            GitHubUserName = UserDetail.objects.get(User = request.user).GitHubUsername
+            CoursePrefix = course.GitHubPrefix
+            AssignmentPrefix = assignment.GitHubPrefix
+            SolutionLink = assignment.SolutionLink
+            #Call Code which saves the GradeInfo object to the returnVal object
+            returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix,SolutionLink)
+            #Displays the results of the method call on the webpage as a message response
+            messages.add_message(request, messages.INFO, returnVal.comments)
+            #If there is already a submission, then overwrite it.
+            roster = Roster.objects.get(UserID = request.user, CourseID = course)
+            submission = Submission.objects.filter(AssignmentID = assignment, RosterID = roster)
+            if submission.count() > 0:
+                submission.delete()
+            #Adds the grade into the database
+            instance = Submission()
+            instance.AssignmentID = assignment
+            instance.RosterID = roster
+            instance.SubmittedOn = datetime.now()
+            instance.Grade = (returnVal.passedTests / returnVal.totalTests) * assignment.PossiblePts
+            instance.Comments = returnVal.comments
+            instance.DidUseExtension = True
+            instance.save()
+        return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'pastSubmission':pastSubmission,'userDetails':userDetails})
 
 #Custom class used in assignment_grades() to store the info for each submission
 class combinedGradeInfo():
@@ -152,7 +187,13 @@ class combinedGradeInfo():
         self.userDetail = None
 
 #Shows a list of grades for all students enrolled in the course - Added by Micah Steinbock on March 26, 2020
+@login_required(login_url="login")
 def assignment_grades(request, course_id, assn_name):
+    #Only allow teachers to navigate to this page
+    userDetails = UserDetail.objects.get(User = request.user)
+    if not userDetails.isTeacher:
+        return redirect('account')
+    
     #Get course and assignment info
     course = Course.objects.get(Slug=course_id)
     assignment = Assignment.objects.get(Slug=assn_name)
@@ -175,7 +216,13 @@ def assignment_grades(request, course_id, assn_name):
     return render(request, 'assignment_grades.html', {'course':course, 'assignment':assignment, 'submission_info':submission_info})
 
 #Creation page for assignments - Added by Micah Steinbock on March 10, 2020
+@login_required(login_url="login")
 def create_assignment(request, course_id):
+    #Only allow teachers to navigate to this page
+    userDetails = UserDetail.objects.get(User = request.user)
+    if not userDetails.isTeacher:
+        return redirect('account')
+    
     course = Course.objects.get(Slug=course_id)
     if request.method == 'POST':
         form = forms.CreateAssignment(request.POST)
@@ -188,6 +235,7 @@ def create_assignment(request, course_id):
         form = forms.CreateAssignment()
     return render(request, 'create_assignment.html', {'form':form, 'course':course})
 
+@login_required(login_url="login")
 def grades(request, course_id):
     course = Course.objects.get(Slug=course_id)
     roster = Roster.objects.get(UserID = request.user, CourseID = course)

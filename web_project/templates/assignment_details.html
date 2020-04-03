@@ -1,8 +1,6 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-    <h1>Generic Important Assignment</h1>
-    <p>Standard issue work that totally will not be completed last minute!</p>
     <div class="assignments">
         <h1>{{ course.Title }}</h1>
         <h3>{{ assignment.Title }}</h3>
@@ -10,10 +8,32 @@
         <h4>Due: {{ assignment.DueDate }}</h4>
         <h4>Pts Possible: {{ assignment.PossiblePts }}</h4>
         <h4># Attempts: {{ assignment.NumAttempts }}</h4>
-        <form class="site-form" action="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Test My Code!">
-        </form>
+        {% if pastSubmission %}
+            <table>
+                <tr>
+                    <th>Submitted On:</th>
+                    <td>{{ pastSubmission.SubmittedOn }}</td>
+                </tr>
+                <tr>
+                    <th>Grade:</th>
+                    <td>{{ pastSubmission.Grade }} / {{ assignment.PossiblePts }}</td>
+                </tr>
+                <tr>
+                    <th>Comments:</th>
+                    <td>{{ pastSubmission.Comments }}</td>
+                </tr>
+            </table>
+            <br><br>
+        {% endif %}
+        
+        {% if userDetails.isTeacher %}
+            <a href="{% url 'assignment_grades' course_id=course.Slug assn_name=assignment.Slug %}">View Grades</a>
+        {% else %}
+            <form class="site-form" action="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Test My Code!">
+            </form>
+        {% endif %}
     </div>
     <!-- Message alert with return value from test_runner.py-->
     {% if messages %}

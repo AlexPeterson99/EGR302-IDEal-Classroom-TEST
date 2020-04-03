@@ -17,9 +17,10 @@
                     </button>
                 </li>
                 <li id="out">
-                    <button onclick="location.href='{% url 'home' %}'">
-                        Logout
-                    </button>
+                    <form class="logout-link" action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Logout">
+                    </form>
                 </li>
             </ul>
         </div>    

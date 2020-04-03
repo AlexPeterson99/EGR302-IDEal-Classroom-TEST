@@ -1,11 +1,17 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-<h1>{{userDetails.GitHubUsername}}</h1>
+<h1>{{userDetails.User.username}}</h1>
 {% if userDetails.isTeacher %}
     <h1>{{ userDetails.GitHubUsername }}</h1>
+    <a href="{% url 'create_course' %}">Create a Course</a>
 {% endif %}
+<br>
+<a href="{% url 'courses' %}">View Courses</a>
 
+<!--
+    Commented out by Micah Steinbock on April 2, 2020
+    Reason: This is all wrong
 <div class="courses">
     <h2 id="header">Courses:</h2>
     {% for course in courses %}
@@ -24,3 +30,4 @@
     {% endfor %}
 </div>
 {% endblock %}
+-->

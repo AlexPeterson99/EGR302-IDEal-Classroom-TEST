@@ -1,14 +1,18 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-    <h1>That one course with important information!</h1>
-    <p>Totally will not become outdated knowledge by graduation!</p>
     <div class="courses">
-        <h1>{{ course.Title }}</h1>
-        {% for assignment in assignments %}
-            <h3><a href="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}">{{ assignment.Title }}</a></h3>
-        {% endfor %}
-        <a href="{% url 'create_assignment' course_id=course.Slug %}">Add Assignment</a>
+        <h1>{{ course.Code }} - {{ course.Title }}</h1>
+        <h3>{{ course.Description }}</h3>
+        <h3>Instructor: <a href="mailto:{{ course.InstructorID.email }}">{{ course.InstructorID.first_name }} {{ course.InstructorID.last_name }}</a></h3>
+        <hr>
+        <h3><a href="{% url 'assignments' course_id=course.Slug %}">View Assignments</a></h3>
+
+        
     </div>
-    <a href="{% url 'grades' course_id=course.Slug %}">View Grades</a>
+    {% if userDetails.isTeacher %}
+        <h3><a href="{% url 'create_assignment' course_id=course.Slug %}">Create Assignment</a></h3>
+    {% else %}
+        <h3><a href="{% url 'grades' course_id=course.Slug %}">View Grades</a></h3>
+    {% endif %}
 {% endblock %}
