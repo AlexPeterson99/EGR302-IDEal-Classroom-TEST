@@ -12,10 +12,15 @@ from datetime import datetime
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
 def home(request):
+    if request.user.is_authenticated:
+        return redirect('account')
+    else:
+        return redirect('login')
     return render(request, "home.html")
 
 # Login form page - Updated by Abanoub Farag on Feb 23, 2020
 def login_view(request):
+    setattr(request, 'view', 'login')
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -37,6 +42,7 @@ def logout_view(request):
 
 # User registration page - Updated by Abanoub Farag on March 27, 2020
 def register(request):
+    setattr(request, 'view', 'register')
     if request.method == 'POST':
         userInfo = forms.UserCreationForm(request.POST)
         details = forms.Register(request.POST)
@@ -45,6 +51,7 @@ def register(request):
             infoInstance = userInfo.save(commit=False)
             detailsInstance = details.save(commit=False)
             #Set info in the User table to info gathered in the UserDetail section
+            #NOT CURRENTLY ADDING ANYTHING
             infoInstance.email = detailsInstance.Email
             infoInstance.first_name = detailsInstance.Firstname
             infoInstance.last_name = detailsInstance.Lastname
@@ -70,6 +77,35 @@ def account(request):
     else:
         courses = Roster.objects.filter(UserID = request.user)
     return render(request, "account.html", {'userDetails': userDetails,'courses':courses})
+
+@login_required(login_url="login")
+def edit_info(request):
+    userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'edit')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+    if request.method == 'POST':    
+        form = forms.EditInfo(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            userDetails.Email = instance.Email
+            userDetails.Firstname = instance.Firstname
+            userDetails.Lastname = instance.Lastname
+            userDetails.SchoolID = instance.SchoolID
+            userDetails.GitHubUsername = instance.GitHubUsername
+            userDetails.save()
+            user = userDetails.User
+            user.email = instance.Email
+            user.first_name = instance.Firstname
+            user.last_name = instance.Lastname
+            user.save()
+            return redirect('account')
+    else:
+        form = forms.EditInfo(initial={'Email':userDetails.Email, 'Firstname':userDetails.Firstname, 'Lastname':userDetails.Lastname, 'SchoolID':userDetails.SchoolID, 'GitHubUsername':userDetails.GitHubUsername})
+
+    return render(request, 'edit_info.html', {'userDetails':userDetails,'form':form,'courses':courses})
 
 #Page where an instructor can create a course - Added by Micah Steinbock on March 6, 2020
 @login_required(login_url="login")
@@ -99,6 +135,7 @@ def create_course(request):
 #Temp removed by Micah Steinbock on April 3, 2020
 @login_required(login_url="login")
 def courses(request):
+    return redirect('account')
     userDetails = UserDetail.objects.get(User = request.user)
     setattr(request, 'view', 'courses')
     if userDetails.isTeacher:
@@ -159,6 +196,7 @@ def course_details(request, course_id):
 # Temp removed by Micah Steinbock on April 3, 2020
 @login_required(login_url="login")
 def assignments(request, course_id):
+    return redirect('account')
     course = Course.objects.get(Slug=course_id)
     assignments = Assignment.objects.filter(CourseID = course)
     userDetails = UserDetail.objects.get(User = request.user)

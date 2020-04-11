@@ -39,17 +39,17 @@
     {% else %}
         <form class="site-form" action="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" method="post">
             {% csrf_token %}
-            <input type="submit" value="Test My Code!">
+            <input type="submit" class="btn btn-primary" value="Test My Code!">
         </form>
     {% endif %}
 </div>
-<!-- Message alert for if the "password" is invalid-->
+<!-- Message alert for if the "password" is invalid
 {% if messages %}
 <ul class="messages p-5">
     {% for message in messages %}
     <div class="alert alert-danger w-50 mx-auto text-center" role="alert">{{ message }}</div>
     {% endfor %}
 </ul>
-{% endif %}
+{% endif %}-->
 
 {% endblock %}

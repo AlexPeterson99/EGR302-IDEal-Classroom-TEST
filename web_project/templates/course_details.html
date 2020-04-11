@@ -5,9 +5,10 @@
 <div class="text-center m-5">
     <h1>{{ course.Code }} - {{ course.Title }}</h1>
     <h5 class="w-50 mx-auto">{{ course.Description }}</h5>
-    <h3>Instructor: <a href="mailto:{{ course.InstructorID.email }}">{{ course.InstructorID.first_name }} {{ course.InstructorID.last_name }}</a></h3>
     {% if userDetails.isTeacher %}
         <p>Enroll ID: {{ course.Password }}</p>
+    {% else %}
+        <h3>Instructor: <a href="mailto:{{ course.InstructorID.email }}">{{ course.InstructorID.first_name }} {{ course.InstructorID.last_name }}</a></h3>
     {% endif %}
 </div>
 

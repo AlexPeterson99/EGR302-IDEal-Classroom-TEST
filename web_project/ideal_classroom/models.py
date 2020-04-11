@@ -163,6 +163,7 @@ class Assignment(models.Model):
     ShowSolutionOnDate = models.DateTimeField(auto_now_add=False, auto_now=False, blank=True, null=True)
     NumAttempts = models.IntegerField()
     GitHubPrefix = models.CharField(max_length=255)
+    hasRun = models.BooleanField()
 
     def __str__(self):
         return self.CourseID.Code + ' - ' + self.Title

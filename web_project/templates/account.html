@@ -37,7 +37,7 @@
             <li class="list-group-item list-group-item-action disabled">School ID: {{ userDetails.SchoolID}}</li>
             <li class="list-group-item list-group-item-action disabled">Github Username: {{ userDetails.GitHubUsername }}</li>
         </ul>
-        <a class="btn btn-primary ml-3" href="#" onclick="alert('This feature is a WIP')" role="button">Edit Info</a>
+        <a class="btn btn-primary ml-3" href="{% url 'edit_info' %}" role="button">Edit Info</a>
     </div>
 </div>
 

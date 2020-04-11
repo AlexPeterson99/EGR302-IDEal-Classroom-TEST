@@ -10,7 +10,8 @@
     <form class="site-form" action="{% url 'create_assignment' course_id=course.Slug %}" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Create Assignment">
+        <input type="submit" class="btn btn-primary" value="Create Assignment">
+        <a href="{% url 'account' %}" class="btn btn-primary">Cancel</a>
     </form>    
 </div>
 

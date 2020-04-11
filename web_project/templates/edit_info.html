@@ -5,11 +5,11 @@
 {% block content %}
 
 <div class="w-75 mx-auto my-3">
-    <h1>Create a course!</h1>
-    <form class="site-form" action="{% url 'create_course' %}" method="post">
+    <h1>Edit Your Info!</h1>
+    <form class="site-form" action="{% url 'edit_info' %}" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" class="btn btn-primary" value="Create Course">
+        <input type="submit" class="btn btn-primary" value="Save Changes">
         <a href="{% url 'account' %}" class="btn btn-primary">Cancel</a>
     </form>
 </div>

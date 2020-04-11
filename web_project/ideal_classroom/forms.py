@@ -25,3 +25,8 @@ class Register(forms.ModelForm):
     class Meta:
         model = models.UserDetail
         fields = ['Email', 'Firstname', 'Lastname', 'SchoolID', 'GitHubUsername', 'isTeacher']
+
+class EditInfo(forms.ModelForm):
+    class Meta:
+        model = models.UserDetail
+        fields = ['Email', 'Firstname', 'Lastname', 'SchoolID', 'GitHubUsername']
