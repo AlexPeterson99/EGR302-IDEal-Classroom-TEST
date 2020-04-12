@@ -121,6 +121,7 @@ def create_course(request):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.InstructorID = request.user
+            instance.hasRun = False
             instance.save()
             return redirect('account')
     else:
