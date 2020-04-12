@@ -1,11 +1,16 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
+
+<div class="text-center m-5">
     <h1>{{ course.Title }}</h1>
     <h2>Grades for {{ assignment.Title }}</h2>
     <h4>Due On: {{ assignment.DueDate }}</h4>
     <h4>Possible Points: {{ assignment.PossiblePts }}</h4>
-    <table>
+</div>
+
+<ul class="list-group w-50 m-auto">
+    <table class="w-100">
             <tr>
                 <th>User Info</th>
                 <th>Points</th>
@@ -27,4 +32,5 @@
             </tr>
         {% endfor %}
     </table>
+</ul>
 {% endblock %}

@@ -121,7 +121,6 @@ def create_course(request):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.InstructorID = request.user
-            instance.hasRun = False
             instance.save()
             return redirect('account')
     else:
@@ -309,6 +308,7 @@ def create_assignment(request, course_id):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.CourseID = course
+            instance.hasRun = False
             instance.save()
             return redirect('account')
     else:

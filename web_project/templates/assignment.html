@@ -16,6 +16,6 @@
 {% if userDetails.isTeacher %}
     <a href="{% url 'create_assignment' course_id=course.Slug %}">Create an Assignment</a>
 {% else %}
-    <a href="{% url 'grades' course_id=course.Slug %}">View Grades</a>
+    <a class="btn btn-primary" href="{% url 'grades' course_id=course.Slug %}">View Grades</a>
 {% endif %}
 {% endblock %}

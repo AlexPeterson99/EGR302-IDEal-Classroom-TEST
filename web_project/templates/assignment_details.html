@@ -35,7 +35,7 @@
 
 <div class="text-center pt-5">
     {% if userDetails.isTeacher %}
-        <a href="{% url 'assignment_grades' course_id=course.Slug assn_name=assignment.Slug %}">View Grades</a>
+        <a class="btn btn-primary" href="{% url 'assignment_grades' course_id=course.Slug assn_name=assignment.Slug %}">View Grades</a>
     {% else %}
         <form class="site-form" action="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" method="post">
             {% csrf_token %}
