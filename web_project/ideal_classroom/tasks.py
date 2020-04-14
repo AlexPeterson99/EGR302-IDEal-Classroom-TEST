@@ -1,7 +1,13 @@
-import time, schedule
 from datetime import datetime
-from .models import Assignment
+from .models import Assignment, Roster, UserDetail, Submission
 from test_runner import test_print
+from apscheduler.schedulers.background import BackgroundScheduler
+
+# starts scheduled tasks
+def start():
+    sched = BackgroundScheduler()
+    sched.start()
+    sched.add_job(check_time, 'interval', hours=3)
 
 def check_time():
     # the amount of grace to give in hours
@@ -59,11 +65,3 @@ def compare_to(date, other):
         return date.minute - other.minute
     else:
         return date.second - other.second
-    
-
-
-schedule.every(3).hours.do(check_time)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
