@@ -21,7 +21,12 @@
                 </tr>
                 <tr>
                     <th>Grade:</th>
-                    <td>{{ pastSub.Grade }} / {{ assignment.PossiblePts }}</td>
+                    {% if pastSub.Grade == assignment.PossiblePts %}
+                    <td class="bg-success">
+                        {% else %}
+                    <td class="bg-danger">
+                        {% endif %}
+                        {{ pastSub.Grade }} / {{ assignment.PossiblePts }}</td>
                 </tr>
                 <tr>
                     <th>Comments:</th>
