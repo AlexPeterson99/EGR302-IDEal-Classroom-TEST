@@ -1,22 +1,24 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from .models import Assignment, Roster, UserDetail, Submission
 from test_runner import test_print
 from apscheduler.schedulers.background import BackgroundScheduler
 
 # starts scheduled tasks
-def start():
+def start_tasks():
+    print("started")
     sched = BackgroundScheduler()
+    sched.print_jobs()
     sched.start()
-    sched.add_job(check_time, 'interval', hours=3)
+    sched.add_job(check_time, 'interval', hours=3, replace_existing=True)
+
 
 def check_time():
-    # the amount of grace to give in hours
-    grace_period = 1
+    print("Checked assignments")
     # pull dates from database and fill in instead of hardcoded value
     assignments = Assignment.objects.filter(hasRun = False)
     for a in assignments:
         d = a.DueDate
-        check = datetime(d.year, d.month, d.day, d.hour + grace_period, d.minute)
+        check = d - timedelta(hours=6)
         now = datetime.now()
         if (compare_to(check, now) <= 0):
             run_tests(a)
@@ -25,6 +27,7 @@ def check_time():
 def run_tests(a):
     # make sure assignment only runs once
     a.hasRun = True
+    a.save()
     # get a list of all the students in the course
     roster_entries = Roster.objects.filter(CourseID = a.CourseID)
     for row in roster_entries:

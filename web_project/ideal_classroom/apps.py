@@ -6,5 +6,5 @@ class IdealClassroomConfig(AppConfig):
 
     # ready method overwritten by Abanoub Farag on 4/14/2020 to start scheduled tasks on launch of server
     def ready(self):
-        from .tasks import start
-        start()
+        from .tasks import start_tasks
+        start_tasks()
