@@ -18,25 +18,18 @@ import os
 import subprocess
 from pathlib import Path
 import time
+from shutil import copyfile
 
 #The absolute path of where junit is located.
 #Junit us a dependency for compiling JUnit test classes
-JUNIT_HOME = "D:\\CBU\\SP20\\EGR302\\Hello-World\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar"
+JUNIT_HOME = "C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar"
 #The absolute path of where hamcrest is located.
 #hamcrest is a dependency for compiling Junit.
-HAMCREST_HOME = "D:\\CBU\\SP20\\EGR302\\Hello-World\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar"
+HAMCREST_HOME = "C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar"
 
 #The time to allow a test to run before declaring a fail result.
 #This is handy if the JAVA class being tested has an infinite loop or buggy code.
 TEST_TIMEOUT = 10
-
-
-
-
-#The time to allow a test to run before declaring a fail result.
-#This is handy if the JAVA class being tested has an infinite loop or buggy code.
-TEST_TIMEOUT = 10
-
 
 # This method retrieves all .java source files found in a given directory
 #
@@ -81,25 +74,10 @@ def get_tst_file(cwd, tst_location):
         os.chdir(direct)
 
 def compile(temp_dir, solution_dir):
-    try:
-        cwd = os.getcwd()
-        os.chdir(temp_dir + '\src\\')
-        src_files = get_src_files(temp_dir)
-        tst_file = get_tst_file(cwd, solution_dir)
-        #print('tst: ' + tst_file)
-        #os.chdir(cwd)
-        print(os.getcwd())
-        subprocess.run('javac -cp {file}'.format(file= src_files[0]))
-        
-        #print('we got here. It might have compiled :)')
+    #cwd is web_projects
 
-    except subprocess.TimeoutExpired:
-        pass
-    except FileNotFoundError:
-        pass
-    finally:
-        print(os.getcwd())
-        os.chdir(cwd)
+
+
 
 #   Determins if ALL tests passed, or if there are failing tests.
 #   pre:
