@@ -217,8 +217,6 @@ def edit_course(request, course_id):
         form = forms.EditCourse(initial={'Title':course.Title, 'Code':course.Code, 'Description':course.Description, 'Slug':course.Slug, 'GitHubPrefix':course.GitHubPrefix})
 
     return render(request, 'edit_course.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course})
-            
-
 
 # Will show a list of all assignments that are in the given course - Added by Austen Combs on Feb 20, 2020
 # Temp removed by Micah Steinbock on April 3, 2020
@@ -246,7 +244,7 @@ def assignment_details(request, course_id, assn_name):
         courses = Roster.objects.filter(UserID = request.user)
     if userDetails.isTeacher:
         course = Course.objects.get(Slug=course_id)
-        assignment = Assignment.objects.get(Slug= assn_name)
+        assignment = Assignment.objects.get(Slug=assn_name)
         return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'userDetails':userDetails,'courses':courses})
     else:
         #Student View
@@ -280,6 +278,39 @@ def assignment_details(request, course_id, assn_name):
             instance.DidUseExtension = True
             instance.save()
         return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'pastSubmission':pastSubmission,'userDetails':userDetails,'courses':courses})
+
+@login_required(login_url="login")
+def edit_assignment(request, course_id, assn_name):
+    userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'edit')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+
+    course = Course.objects.get(Slug = course_id)
+    assignments = Assignment.objects.filter(CourseID = course)
+    assignment = Assignment.objects.get(Slug = assn_name)
+    if request.method == 'POST':
+        form = forms.EditAssn(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            assignment.Title = instance.Title
+            assignment.Description = instance.Description
+            assignment.DueDate = instance.DueDate
+            assignment.ReleaseDate = instance.ReleaseDate
+            assignment.PossiblePts = instance.PossiblePts
+            assignment.SolutionLink = instance.SolutionLink
+            assignment.ShowSolution = instance.ShowSolution
+            assignment.ShowSolutionOnDate = instance.ShowSolutionOnDate
+            assignment.NumAttempts = instance.NumAttempts
+            assignment.GitHubPrefix = instance.GitHubPrefix
+            assignment.save()
+            return redirect('account')
+    else:
+        form = forms.EditAssn(initial={'Title':assignment.Title, 'Slug':assignment.Slug, 'Description':assignment.Description, 'DueDate':assignment.DueDate, 'ReleaseDate':assignment.ReleaseDate, 'PossiblePts':assignment.PossiblePts, 'SolutionLink':assignment.SolutionLink, 'ShowSolution':assignment.ShowSolution, 'ShowSolutionOnDate':assignment.ShowSolutionOnDate, 'NumAttempts':assignment.NumAttempts, 'GitHubPrefix':assignment.GitHubPrefix})
+
+    return render(request, 'edit_assignment.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course, 'assignments':assignments, 'assignment':assignment})
 
 #Custom class used in assignment_grades() to store the info for each submission
 class combinedGradeInfo():
@@ -360,3 +391,29 @@ def grades(request, course_id):
     else:
         courses = Roster.objects.filter(UserID = request.user)
     return render(request, 'grades.html', {'course':course, 'grades':grades,'userDetails':userDetails,'courses':courses})
+
+@login_required(login_url="login")
+def edit_grades(request, course_id):
+    userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'edit')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+
+    course = Course.objects.get(Slug = course_id)
+    if request.method == 'POST':
+        form = forms.EditCourse(request.POST)
+        if form.is_valid():
+            
+            instance = form.save(commit=False)
+            course.Title = instance.Title
+            course.Code = instance.Code
+            course.Description = instance.Description
+            course.GitHubPrefix = instance.GitHubPrefix
+            course.save()
+            return redirect('account')
+    else:
+        form = forms.EditCourse(initial={'Title':course.Title, 'Code':course.Code, 'Description':course.Description, 'Slug':course.Slug, 'GitHubPrefix':course.GitHubPrefix})
+
+    return render(request, 'edit_course.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course})

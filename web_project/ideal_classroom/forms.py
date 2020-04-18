@@ -35,3 +35,8 @@ class EditCourse(forms.ModelForm):
     class Meta:
         model = models.Course
         fields = ['Title', 'Code', 'Description', 'GitHubPrefix']
+
+class EditAssn(forms.ModelForm):
+    class Meta:
+        model = models.Assignment
+        fields = ['Title', 'Description', 'DueDate', 'ReleaseDate', 'PossiblePts', 'SolutionLink', 'ShowSolution', 'ShowSolutionOnDate', 'NumAttempts', 'GitHubPrefix']
