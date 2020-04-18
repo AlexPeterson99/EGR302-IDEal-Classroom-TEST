@@ -192,6 +192,34 @@ def course_details(request, course_id):
         courses = Roster.objects.filter(UserID = request.user)
     return render(request, 'course_details.html', {'course':course,'assignments':assignments, 'userDetails':userDetails,'courses':courses})
 
+@login_required(login_url="login")
+def edit_course(request, course_id):
+    userDetails = UserDetail.objects.get(User = request.user)
+    setattr(request, 'view', 'edit')
+    if userDetails.isTeacher:
+        courses = Course.objects.filter(InstructorID = request.user)
+    else:
+        courses = Roster.objects.filter(UserID = request.user)
+
+    course = Course.objects.get(Slug = course_id)
+    if request.method == 'POST':
+        form = forms.EditCourse(request.POST)
+        if form.is_valid():
+            
+            instance = form.save(commit=False)
+            course.Title = instance.Title
+            course.Code = instance.Code
+            course.Description = instance.Description
+            course.GitHubPrefix = instance.GitHubPrefix
+            course.save()
+            return redirect('account')
+    else:
+        form = forms.EditCourse(initial={'Title':course.Title, 'Code':course.Code, 'Description':course.Description, 'Slug':course.Slug, 'GitHubPrefix':course.GitHubPrefix})
+
+    return render(request, 'edit_course.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course})
+            
+
+
 # Will show a list of all assignments that are in the given course - Added by Austen Combs on Feb 20, 2020
 # Temp removed by Micah Steinbock on April 3, 2020
 @login_required(login_url="login")

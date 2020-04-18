@@ -6,10 +6,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # starts scheduled tasks
 def start_tasks():
     print("started")
-    sched = BackgroundScheduler()
-    sched.print_jobs()
-    sched.start()
-    sched.add_job(check_time, 'interval', hours=3, replace_existing=True)
+    #sched = BackgroundScheduler()
+    #sched.print_jobs()
+    #sched.start()
+    #sched.add_job(check_time, 'interval', hours=3, replace_existing=True)
 
 
 def check_time():

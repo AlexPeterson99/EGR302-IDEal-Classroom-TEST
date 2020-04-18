@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^courses/$', views.courses, name="courses"),
     url(r'^courses/enroll/$', views.enroll, name="enroll"),
     url(r'^courses/(?P<course_id>[\w-]+)/$', views.course_details, name="course_details"),
+    url(r'^courses/(?P<course_id>[\w-]+)/edit$', views.edit_course, name="edit_course"),
     url(r'^courses/(?P<course_id>[\w-]+)/assignments/$', views.assignments, name="assignments"),
     url(r'^courses/(?P<course_id>[\w-]+)/assignments/(?P<assn_name>[\w-]+)/$', views.assignment_details, name="assignment_details"),
     url(r'^courses/(?P<course_id>[\w-]+)/assignments/(?P<assn_name>[\w-]+)/grades/$', views.assignment_grades, name="assignment_grades"),

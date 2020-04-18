@@ -151,4 +151,4 @@ def get_tst_file(tst_location):
     except FileNotFoundError:
         pass
 
-test_print("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")
+#test_print("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")

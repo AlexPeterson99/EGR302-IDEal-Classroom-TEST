@@ -30,3 +30,8 @@ class EditInfo(forms.ModelForm):
     class Meta:
         model = models.UserDetail
         fields = ['Email', 'Firstname', 'Lastname', 'SchoolID', 'GitHubUsername']
+
+class EditCourse(forms.ModelForm):
+    class Meta:
+        model = models.Course
+        fields = ['Title', 'Code', 'Description', 'GitHubPrefix']
