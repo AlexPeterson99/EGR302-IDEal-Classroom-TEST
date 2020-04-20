@@ -41,8 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ideal_classroom',
     'accounts',
-    'crispy_forms'
+    'crispy_forms',
+    'bootstrap4',
+    'bootstrap_datepicker_plus'
 ]
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
