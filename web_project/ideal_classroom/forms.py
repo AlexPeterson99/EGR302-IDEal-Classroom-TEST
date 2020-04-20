@@ -3,11 +3,6 @@ from . import models
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-#Commented out b/c it does not work with SQL Formatting
-#class MyDateTimeInput(forms.DateTimeInput):
-    #input_type = 'datetime-local'
-
-
 class CreateCourse(forms.ModelForm):
     class Meta:
         model = models.Course
@@ -15,8 +10,6 @@ class CreateCourse(forms.ModelForm):
         
 class CreateAssignment(forms.ModelForm):
     class Meta:
-        #widget= forms.Date
-        #widgets = {'DueDate' : MyDateTimeInput(), 'ReleaseDate' : MyDateTimeInput(), 'ShowSolutionOnDate' : MyDateTimeInput()}
         model = models.Assignment
         fields = ['Title', 'Slug', 'Description', 'DueDate', 'ReleaseDate', 'PossiblePts', 'SolutionLink', 'ShowSolution', 'ShowSolutionOnDate', 'NumAttempts', 'GitHubPrefix']
         widgets = {'DueDate': DateTimePickerInput(), 'ReleaseDate': DateTimePickerInput()}
