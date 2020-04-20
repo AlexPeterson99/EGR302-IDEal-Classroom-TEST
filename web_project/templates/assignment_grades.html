@@ -17,6 +17,7 @@
                 <th>Test Run On</th>
                 <th>Comments</th>
                 <th>Chance?</th>
+                
             </tr>
         {% for info in submission_info %}
             <tr>
@@ -29,6 +30,7 @@
                 <td>{{ info.submission.SubmittedOn }}</td>
                 <td>{{ info.submission.Comments }}</td>
                 <td>{{ info.submission.DidUseExtension }}</td>
+                <td><a class="btn btn-primary" href="{% url 'edit_grades' course_id=course.Slug assn_name=assignment.Slug username=info.submission.RosterID.UserID.username %}">Edit Grade</a></td>
             </tr>
         {% endfor %}
     </table>

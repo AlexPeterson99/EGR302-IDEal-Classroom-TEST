@@ -422,4 +422,4 @@ def edit_grades(request, course_id, assn_name, username):
     else:
         form = forms.EditGrades(initial={'Grade':submission.Grade, 'Comments':submission.Comments})
 
-    return render(request, 'edit_grades.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course, 'assignment':assignment, 'submission':submission})
+    return render(request, 'edit_grades.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course, 'assignment':assignment, 'submission':submission, 'username':username})
