@@ -40,3 +40,8 @@ class EditAssn(forms.ModelForm):
     class Meta:
         model = models.Assignment
         fields = ['Title', 'Description', 'DueDate', 'ReleaseDate', 'PossiblePts', 'SolutionLink', 'ShowSolution', 'ShowSolutionOnDate', 'NumAttempts', 'GitHubPrefix']
+
+class EditGrades(forms.ModelForm):
+    class Meta:
+        model = models.Submission
+        fields = ['Grade', 'Comments']

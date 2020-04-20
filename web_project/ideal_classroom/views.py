@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db import connection
 from .models import Course, Roster, Assignment, Submission, AuthUser, UserDetail
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -308,7 +309,9 @@ def edit_assignment(request, course_id, assn_name):
             assignment.save()
             return redirect('account')
     else:
-        form = forms.EditAssn(initial={'Title':assignment.Title, 'Slug':assignment.Slug, 'Description':assignment.Description, 'DueDate':assignment.DueDate, 'ReleaseDate':assignment.ReleaseDate, 'PossiblePts':assignment.PossiblePts, 'SolutionLink':assignment.SolutionLink, 'ShowSolution':assignment.ShowSolution, 'ShowSolutionOnDate':assignment.ShowSolutionOnDate, 'NumAttempts':assignment.NumAttempts, 'GitHubPrefix':assignment.GitHubPrefix})
+        form = forms.EditAssn(initial={'Title':assignment.Title, 'Slug':assignment.Slug, 'Description':assignment.Description, 'DueDate':assignment.DueDate,
+            'ReleaseDate':assignment.ReleaseDate, 'PossiblePts':assignment.PossiblePts, 'SolutionLink':assignment.SolutionLink, 'ShowSolution':assignment.ShowSolution,
+            'ShowSolutionOnDate':assignment.ShowSolutionOnDate, 'NumAttempts':assignment.NumAttempts, 'GitHubPrefix':assignment.GitHubPrefix})
 
     return render(request, 'edit_assignment.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course, 'assignments':assignments, 'assignment':assignment})
 
@@ -393,7 +396,7 @@ def grades(request, course_id):
     return render(request, 'grades.html', {'course':course, 'grades':grades,'userDetails':userDetails,'courses':courses})
 
 @login_required(login_url="login")
-def edit_grades(request, course_id):
+def edit_grades(request, course_id, assn_name, username):
     userDetails = UserDetail.objects.get(User = request.user)
     setattr(request, 'view', 'edit')
     if userDetails.isTeacher:
@@ -401,19 +404,22 @@ def edit_grades(request, course_id):
     else:
         courses = Roster.objects.filter(UserID = request.user)
 
-    course = Course.objects.get(Slug = course_id)
+    course = Course.objects.get(Slug=course_id)
+    assignment = Assignment.objects.get(Slug=assn_name)
+    currentUser = User.objects.get(username = username)
+    roster = Roster.objects.get(CourseID=course, UserID=currentUser)
+    submission = Submission.objects.get(AssignmentID=assignment, RosterID=roster)
+
+
     if request.method == 'POST':
-        form = forms.EditCourse(request.POST)
+        form = forms.EditGrades(request.POST)
         if form.is_valid():
-            
             instance = form.save(commit=False)
-            course.Title = instance.Title
-            course.Code = instance.Code
-            course.Description = instance.Description
-            course.GitHubPrefix = instance.GitHubPrefix
-            course.save()
+            submission.Grade = instance.Grade
+            submission.Comments = instance.Comments
+            submission.save()
             return redirect('account')
     else:
-        form = forms.EditCourse(initial={'Title':course.Title, 'Code':course.Code, 'Description':course.Description, 'Slug':course.Slug, 'GitHubPrefix':course.GitHubPrefix})
+        form = forms.EditGrades(initial={'Grade':submission.Grade, 'Comments':submission.Comments})
 
-    return render(request, 'edit_course.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course})
+    return render(request, 'edit_grades.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course, 'assignment':assignment, 'submission':submission})
