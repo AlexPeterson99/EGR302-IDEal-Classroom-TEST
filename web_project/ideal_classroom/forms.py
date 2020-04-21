@@ -12,7 +12,7 @@ class CreateAssignment(forms.ModelForm):
     class Meta:
         model = models.Assignment
         fields = ['Title', 'Slug', 'Description', 'DueDate', 'ReleaseDate', 'PossiblePts', 'SolutionLink', 'ShowSolution', 'ShowSolutionOnDate', 'NumAttempts', 'GitHubPrefix']
-        widgets = {'DueDate': DateTimePickerInput(), 'ReleaseDate': DateTimePickerInput()}
+        widgets = {'DueDate': DateTimePickerInput(), 'ReleaseDate': DateTimePickerInput(), 'ShowSolutionOnDate': DateTimePickerInput()}
 
 class Enroll(forms.Form):
     course_password = forms.CharField(label='Course Enroll Code', max_length=100)
