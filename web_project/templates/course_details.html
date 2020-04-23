@@ -26,6 +26,7 @@
 <div class="text-center pt-5">
     {% if userDetails.isTeacher %}
         <a class="btn btn-primary" href="{% url 'create_assignment' course_id=course.Slug %}" role="button">Create Assignment</a>
+        <a class="btn btn-primary" href="{% url 'edit_course' course_id=course.Slug %}" role="button">Edit Course</a>
     {% else %}
         <a class="btn btn-primary" href="{% url 'grades' course_id=course.Slug %}" role="button">View Grades</a>
     {% endif %}
