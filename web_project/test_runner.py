@@ -102,7 +102,7 @@ def test_print(username, github_id, course_prefix, assignment_prefix, solution_l
             returnInfo.passedTests = num_tests
             returnInfo.totalTests = num_tests
             print(returnInfo.comments)
-            
+        # When there are failing tests
         else:
             print('Im a sad boy. Tests failed')
             fail_string = test_result[-2].split(', ')
