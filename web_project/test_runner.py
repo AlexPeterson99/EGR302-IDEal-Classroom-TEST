@@ -64,7 +64,9 @@ class GradeInfo:
     #return returnVal
 
 def test_print(username, github_id, course_prefix, assignment_prefix, solution_link):
+    returnInfo = GradeInfo()
     #Temporary File to store users code
+    cwd = os.getcwd()
     with make_temp_directory() as temp_dir:
         assignment_link = 'https://github.com/{CoursePrefix}/{AssignmentPrefix}-{GitHubId}'.format(GitHubId=github_id,CoursePrefix=course_prefix,AssignmentPrefix=assignment_prefix)
         solution_dir = '\\solution\{course}\{assignment}'.format(course=course_prefix, assignment=assignment_prefix)
@@ -87,16 +89,39 @@ def test_print(username, github_id, course_prefix, assignment_prefix, solution_l
         cwd = os.getcwd()
         os.chdir(temp_dir + '\\src')
         print(os.getcwd())
-
+        test_name = os.path.split(tst_file)[-1].strip('.java')
         subprocess.run('javac *.java')
-        subprocess.run('java -cp .;C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar;C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar org.junit.runner.JUnitCore AssassinManagerInstructorTest')
-        time.sleep(100)
+        #subprocess.run('java -cp .;C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar;C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar org.junit.runner.JUnitCore AssassinManagerInstructorTest')
+        with open('result.txt', 'w') as output:
+            subprocess.run('java -cp .;{};{} org.junit.runner.JUnitCore {}'.format(JUNIT_HOME, HAMCREST_HOME, test_name), stdout=output)
+        with open('result.txt', 'r') as input:
+            test_result = input.readlines()
+        if("OK" in test_result[-2]):
+            num_tests = (test_result[-2].split(' '))[1][1:]
+            returnInfo.comments = "All tests passed. (" + num_tests + " out of " + num_tests + ")"
+            returnInfo.passedTests = num_tests
+            returnInfo.totalTests = num_tests
+            print(returnInfo.comments)
+            
+        else:
+            print('Im a sad boy. Tests failed')
+            fail_string = test_result[-2].split(', ')
+            nums = []
+            for string in fail_string:
+                nums.append( (int(string.split(' ')[2])))
+            tests_total = nums[0]
+            tests_passed = int(nums[0]) - int(nums[1])
+            print(tests_passed)
+            print(tests_total)
+            print(tests_passed/tests_total)
+
+            returnInfo.comments = "Compiled Successfully"
+            returnInfo.passedTests = tests_passed
+            returnInfo.totalTests = tests_total
+        os.chdir(cwd)
+        time.sleep(20)
         #compile.compile(temp_dir, solution_dir)
 
-    returnInfo = GradeInfo()
-    returnInfo.comments = "Compiled Successfully"
-    returnInfo.passedTests = 10
-    returnInfo.totalTests = 10
 
     return returnInfo
     #now?
@@ -151,4 +176,4 @@ def get_tst_file(tst_location):
     except FileNotFoundError:
         pass
 
-#test_print("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")
+test_print("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")
