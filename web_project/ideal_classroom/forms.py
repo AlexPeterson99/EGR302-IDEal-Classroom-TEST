@@ -40,4 +40,4 @@ class EditAssn(forms.ModelForm):
 class EditGrades(forms.ModelForm):
     class Meta:
         model = models.Submission
-        fields = ['Grade', 'Comments']
+        fields = ['Grade', 'Comments', 'DidUseExtension']

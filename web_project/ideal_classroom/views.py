@@ -213,7 +213,8 @@ def edit_course(request, course_id):
             course.Description = instance.Description
             course.GitHubPrefix = instance.GitHubPrefix
             course.save()
-            return redirect('account')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
     else:
         form = forms.EditCourse(initial={'Title':course.Title, 'Code':course.Code, 'Description':course.Description, 'Slug':course.Slug, 'GitHubPrefix':course.GitHubPrefix})
 
@@ -307,7 +308,8 @@ def edit_assignment(request, course_id, assn_name):
             assignment.NumAttempts = instance.NumAttempts
             assignment.GitHubPrefix = instance.GitHubPrefix
             assignment.save()
-            return redirect('account')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
     else:
         form = forms.EditAssn(initial={'Title':assignment.Title, 'Slug':assignment.Slug, 'Description':assignment.Description, 'DueDate':assignment.DueDate,
             'ReleaseDate':assignment.ReleaseDate, 'PossiblePts':assignment.PossiblePts, 'SolutionLink':assignment.SolutionLink, 'ShowSolution':assignment.ShowSolution,
@@ -417,9 +419,12 @@ def edit_grades(request, course_id, assn_name, username):
             instance = form.save(commit=False)
             submission.Grade = instance.Grade
             submission.Comments = instance.Comments
+            submission.DidUseExtension = instance.DidUseExtension = True
             submission.save()
-            return redirect('account')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
     else:
-        form = forms.EditGrades(initial={'Grade':submission.Grade, 'Comments':submission.Comments})
+        form = forms.EditGrades(initial={'Grade':submission.Grade, 'Comments':submission.Comments, 'DidUseExtension':submission.DidUseExtension})
 
-    return render(request, 'edit_grades.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course, 'assignment':assignment, 'submission':submission, 'username':username})
+    return render(request, 'edit_grades.html', {'userDetails':userDetails,'courses':courses,'form':form,'course':course, 'assignment':assignment,
+    'submission':submission, 'username':username})

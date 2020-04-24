@@ -9,8 +9,9 @@
     <form class="site-form" action="{% url 'edit_assignment' course_id=course.Slug assn_name=assignment.Slug %}" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" class="btn btn-primary" value="Save Changes">
-        <a href="{% url 'account' %}" class="btn btn-primary">Cancel</a>
+        <input type="hidden" name="next" value="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{% url 'assignment_details' course_id=course.Slug assn_name=assignment.Slug %}" class="btn btn-primary">Cancel</a>
     </form>
 </div>
 
