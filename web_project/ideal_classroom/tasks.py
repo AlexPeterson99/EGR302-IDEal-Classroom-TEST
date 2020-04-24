@@ -6,10 +6,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # starts scheduled tasks
 def start_tasks():
     print("started")
-    #sched = BackgroundScheduler()
-    #sched.print_jobs()
-    #sched.start()
-    #sched.add_job(check_time, 'interval', hours=3, replace_existing=True)
+    sched = BackgroundScheduler()
+    sched.print_jobs()
+    sched.start()
+    sched.add_job(check_time, 'interval', minutes=1, replace_existing=True)
 
 #Checks against assignments that have not run
 def check_time():
@@ -25,6 +25,7 @@ def check_time():
 
 #The code that actually runs the test for a given assignment
 def run_tests(a):
+    print("Run Tests")
     # make sure assignment only runs once
     a.hasRun = True
     a.save()

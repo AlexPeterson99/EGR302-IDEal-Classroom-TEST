@@ -277,7 +277,7 @@ def assignment_details(request, course_id, assn_name):
             instance.SubmittedOn = datetime.now()
             instance.Grade = (returnVal.passedTests / returnVal.totalTests) * assignment.PossiblePts
             instance.Comments = returnVal.comments
-            instance.DidUseExtension = True
+            instance.DidUseExtension = False
             instance.save()
         return render(request, 'assignment_details.html', {'course':course,'assignment':assignment,'pastSubmission':pastSubmission,'userDetails':userDetails,'courses':courses})
 
@@ -419,7 +419,7 @@ def edit_grades(request, course_id, assn_name, username):
             instance = form.save(commit=False)
             submission.Grade = instance.Grade
             submission.Comments = instance.Comments
-            submission.DidUseExtension = instance.DidUseExtension = True
+            submission.DidUseExtension = instance.DidUseExtension
             submission.save()
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))

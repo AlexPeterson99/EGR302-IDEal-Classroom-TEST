@@ -23,12 +23,12 @@ import subprocess
 #from utils.java_compilation import compile
 #The absolute path of where junit is located.
 #Junit us a dependency for compiling JUnit test classes
-JUNIT_HOME = "C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar"
+JUNIT_HOME = "D:\\CBU\\SP20\\EGR302\\Hello-World\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar"
 #JUNIT_HOME = "C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar"
 
 #The absolute path of where hamcrest is located.
 #hamcrest is a dependency for compiling Junit.
-HAMCREST_HOME = "C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar"
+HAMCREST_HOME = "D:\\CBU\\SP20\\EGR302\\Hello-World\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar"
 #HAMCREST_HOME = "C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar"
 
 
@@ -79,9 +79,9 @@ def test_runner(username, github_id, course_prefix, assignment_prefix, solution_
 
         # ***IF CALLING USER DOES NOT HAVE GITHUB PERMISSIONS, THIS SECTION OF CODE WILL FAIL***
         try:
-            Repo.clone_from(solution_link, solution_dir)
+            Repo.clone_from(solution_link, os.getcwd() + solution_dir)
         except:
-            g = git.cmd.Git(solution_dir)
+            g = git.cmd.Git(os.getcwd() + solution_dir)
             g.pull()
         
         src_files = get_src_files(temp_dir)
@@ -92,8 +92,9 @@ def test_runner(username, github_id, course_prefix, assignment_prefix, solution_
         os.chdir(temp_dir + '\\src')
         print(os.getcwd())
         test_name = os.path.split(tst_file)[-1].strip('.java')
-        subprocess.run('javac *.java')
+        subprocess.run('javac -cp D:\\CBU\\SP20\\EGR302\\Hello-World\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar; *.java')
         #subprocess.run('java -cp .;C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\junit-4.13.jar;C:\\Users\\bigmo\\OneDrive\\Desktop\\IDEal-Classroom\\IDEal-Classroom\\web_project\\utils\\java_compilation\\java_dependencies\\hamcrest-core-1.3.jar org.junit.runner.JUnitCore AssassinManagerInstructorTest')
+
         with open('result.txt', 'w') as output:
             subprocess.run('java -cp .;{};{} org.junit.runner.JUnitCore {}'.format(JUNIT_HOME, HAMCREST_HOME, test_name), stdout=output)
         with open('result.txt', 'r') as input:
@@ -118,13 +119,12 @@ def test_runner(username, github_id, course_prefix, assignment_prefix, solution_
             print(tests_passed)
             print(tests_total)
             print(tests_passed/tests_total)
-
             returnInfo.comments = comment
             returnInfo.passedTests = int(tests_passed)
             returnInfo.totalTests = int(tests_total)
             print(comment)
         os.chdir(cwd)
-        #time.sleep(4)
+        #time.sleep(100)
         #compile.compile(temp_dir, solution_dir)
 
 
@@ -189,4 +189,4 @@ def get_comments(rslt_list, substring):
     return -1
 
 
-#test_print("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")
+#test_runner("Alex", "AlexPeterson99", "cbu-egr221-sp19", "hw3", "https://github.com/mikiehan/EGR227-HW3-Assassin-Solution")
