@@ -1,9 +1,12 @@
 {% extends 'base_layout.html' %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
-
+{{ form.media }}
 <div class="w-75 mx-auto my-3">
     <h1>Edit the Assignment!</h1>
     <form class="site-form" action="{% url 'edit_assignment' course_id=course.Slug assn_name=assignment.Slug %}" method="post">

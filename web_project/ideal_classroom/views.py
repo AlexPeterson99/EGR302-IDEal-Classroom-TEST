@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from . import forms
 from django.contrib import messages
-from test_runner import test_print
+from test_runner import test_runner
 from datetime import datetime
 
 # User home page - Edited by Austen Combs on Feb 20, 2020
@@ -262,7 +262,7 @@ def assignment_details(request, course_id, assn_name):
             AssignmentPrefix = assignment.GitHubPrefix
             SolutionLink = assignment.SolutionLink
             #Call Code which saves the GradeInfo object to the returnVal object
-            returnVal = test_print(Username,GitHubUserName,CoursePrefix,AssignmentPrefix,SolutionLink)
+            returnVal = test_runner(Username,GitHubUserName,CoursePrefix,AssignmentPrefix,SolutionLink)
             #Displays the results of the method call on the webpage as a message response
             messages.add_message(request, messages.INFO, returnVal.comments)
             #If there is already a submission, then overwrite it.
