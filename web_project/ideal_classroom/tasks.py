@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from .models import Assignment, Roster, UserDetail, Submission
-from test_runner import test_print
+from test_runner import test_runner
 from apscheduler.schedulers.background import BackgroundScheduler
 
 # starts scheduled tasks
@@ -39,7 +39,7 @@ def run_tests(a):
         assignment_prefix = a.GitHubPrefix
         solution = a.SolutionLink
         # run tests and save return value
-        return_val = test_print(username, github_username, course_prefix, assignment_prefix, solution)
+        return_val = test_runner(username, github_username, course_prefix, assignment_prefix, solution)
         submission = Submission.objects.filter(AssignmentID = a, RosterID = row)
         # if a submission already exists delete it
         if submission.count() > 0:

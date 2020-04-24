@@ -66,7 +66,7 @@ class GradeInfo:
     #Returns the GradeInfo object
     #return returnVal
 
-def test_print(username, github_id, course_prefix, assignment_prefix, solution_link):
+def test_runner(username, github_id, course_prefix, assignment_prefix, solution_link):
     returnInfo = GradeInfo()
     #Temporary File to store users code
     cwd = os.getcwd()
