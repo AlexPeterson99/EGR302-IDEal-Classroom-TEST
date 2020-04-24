@@ -11,7 +11,7 @@ def start_tasks():
     #sched.start()
     #sched.add_job(check_time, 'interval', hours=3, replace_existing=True)
 
-
+#Checks against assignments that have not run
 def check_time():
     print("Checked assignments")
     # pull dates from database and fill in instead of hardcoded value
