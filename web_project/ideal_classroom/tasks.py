@@ -54,7 +54,7 @@ def run_tests(a):
         instance.DidUseExtension = False
         instance.save()
 
-#Helper method to compare dates
+#Helper method to compare dates!
 def compare_to(date, other):
     if (date.year != other.year):
         return date.year - other.year
