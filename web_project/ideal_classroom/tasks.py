@@ -23,7 +23,7 @@ def check_time():
         if (compare_to(check, now) <= 0):
             run_tests(a)
 
-
+#The code that actually runs the test for a given assignment
 def run_tests(a):
     # make sure assignment only runs once
     a.hasRun = True
